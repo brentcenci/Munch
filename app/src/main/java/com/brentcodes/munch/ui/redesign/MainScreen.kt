@@ -70,7 +70,7 @@ fun CleanMainScreen(modifier: Modifier = Modifier) {
     val padding = PaddingValues(horizontal = 20.dp)
     val filtersOpen = remember { mutableStateOf(false) }
     val bottomSheetState = rememberModalBottomSheetState()
-    Column {
+    Column(modifier = modifier) {
         LazyColumn(
             contentPadding = PaddingValues(vertical = 20.dp),
             verticalArrangement = Arrangement.spacedBy(20.dp)
@@ -177,7 +177,8 @@ fun CategoriesSection(modifier: Modifier = Modifier, paddingValues: PaddingValue
 fun RecipesSection(modifier: Modifier = Modifier, paddingValues: PaddingValues) {
     MainScreenTitleText(modifier = modifier.padding(paddingValues), text = "Suggested")
     LazyRow(
-        contentPadding = PaddingValues(horizontal = 20.dp)
+        contentPadding = PaddingValues(horizontal = 20.dp),
+        horizontalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         items(10) {
             /*Box(
@@ -198,7 +199,7 @@ fun RecipesSection(modifier: Modifier = Modifier, paddingValues: PaddingValues) 
             }
             Box(
                 modifier = Modifier
-                    .padding(top = 5.dp, end = 10.dp, bottom = 5.dp)
+                    .padding(top = 5.dp, bottom = 5.dp)
                     .size(width = 170.dp, height = 250.dp)
                     .background(LightGrey, RoundedCornerShape(10.dp))
                     .background(gradient, RoundedCornerShape(10.dp))
