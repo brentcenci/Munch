@@ -2,9 +2,12 @@ package com.brentcodes.munch.ui.screens.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.brentcodes.munch.model.RecipeApiClient
+import com.brentcodes.munch.model.RecipeApiService
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
 class MainScreenViewModel: ViewModel() {
     private val _searchBarValue: MutableStateFlow<String> = MutableStateFlow("")
@@ -21,4 +24,15 @@ class MainScreenViewModel: ViewModel() {
 
     private val _selectedIntolerances: MutableStateFlow<List<String>> = MutableStateFlow(emptyList())
     val selectedIntolerances = _selectedIntolerances.stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
+
+    init {
+        viewModelScope.launch {
+            val results = try {
+                RecipeApiClient.recipeApiService.getComplexSearch("chicken")
+            } catch (e: Exception) {
+                println(e.message)
+            }
+            println(results.toString())
+        }
+    }
 }

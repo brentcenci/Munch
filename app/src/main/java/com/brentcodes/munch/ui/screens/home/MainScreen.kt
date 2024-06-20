@@ -67,6 +67,7 @@ fun CleanMainScreen(modifier: Modifier = Modifier) {
     val padding = PaddingValues(horizontal = 20.dp)
     val filtersOpen = remember { mutableStateOf(false) }
     val bottomSheetState = rememberModalBottomSheetState()
+    val vm = remember { MainScreenViewModel() }
     Column(modifier = modifier) {
         LazyColumn(
             contentPadding = PaddingValues(vertical = 20.dp),
