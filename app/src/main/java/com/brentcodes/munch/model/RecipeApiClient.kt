@@ -9,7 +9,7 @@ import retrofit2.http.Query
 private const val BASE_URL =
     "https://api.spoonacular.com/"
 private const val API_KEY =
-    "API KEY HERE"
+    ""
 
 object RetrofitClient {
     val retrofit: Retrofit by lazy {
