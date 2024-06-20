@@ -1,4 +1,4 @@
-package com.brentcodes.munch.ui.redesign
+package com.brentcodes.munch.ui
 
 import com.brentcodes.munch.R
 

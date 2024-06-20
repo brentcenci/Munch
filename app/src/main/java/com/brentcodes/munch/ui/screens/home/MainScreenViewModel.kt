@@ -1,4 +1,4 @@
-package com.brentcodes.munch.ui.redesign
+package com.brentcodes.munch.ui.screens.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

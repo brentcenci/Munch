@@ -61,6 +61,12 @@ dependencies {
     //implementation(libs.androidx.material3)
     implementation("androidx.compose.material3:material3-android:1.2.1")
     implementation("androidx.navigation:navigation-compose:2.7.6")
+    // Retrofit & GSON
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    //Coil for Image Processing from URL
+    implementation("io.coil-kt:coil:2.4.0")
+    implementation("io.coil-kt:coil-compose:2.4.0")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

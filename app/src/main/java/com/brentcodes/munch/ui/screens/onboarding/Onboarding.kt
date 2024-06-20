@@ -1,4 +1,4 @@
-package com.brentcodes.munch.ui.redesign
+package com.brentcodes.munch.ui.screens.onboarding
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
