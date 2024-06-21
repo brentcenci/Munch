@@ -28,6 +28,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.brentcodes.munch.ui.screens.home.CleanMainScreen
 import com.brentcodes.munch.ui.Screen
+import com.brentcodes.munch.ui.screens.saved.SavedScreen
+import com.brentcodes.munch.ui.screens.search.SearchScreen
 import com.brentcodes.munch.ui.theme.MunchTheme
 
 class MainActivity : ComponentActivity() {
@@ -74,10 +76,10 @@ class MainActivity : ComponentActivity() {
                             CleanMainScreen(modifier = Modifier.padding(padding))
                         }
                         composable(route = Screen.Search.route) {
-
+                            SearchScreen(modifier = Modifier.padding(padding))
                         }
                         composable(route = Screen.Saved.route) {
-
+                            SavedScreen(modifier = Modifier.padding(padding))
                         }
                     }
 
