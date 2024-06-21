@@ -73,7 +73,7 @@ class MainActivity : ComponentActivity() {
                 ) { padding ->
                     NavHost(navController = navController, startDestination = Screen.Home.route) {
                         composable(route = Screen.Home.route) {
-                            CleanMainScreen(modifier = Modifier.padding(padding))
+                            CleanMainScreen(modifier = Modifier.padding(padding), navController = navController)
                         }
                         composable(route = Screen.Search.route) {
                             SearchScreen(modifier = Modifier.padding(padding))

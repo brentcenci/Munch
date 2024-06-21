@@ -52,18 +52,22 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.brentcodes.munch.R
 import com.brentcodes.munch.ui.CATEGORIES
 import com.brentcodes.munch.ui.CUISINES
 import com.brentcodes.munch.ui.DIETS
 import com.brentcodes.munch.ui.INTOLERANCES
+import com.brentcodes.munch.ui.Screen
+import com.brentcodes.munch.ui.screens.CustomSearchBar
 import com.brentcodes.munch.ui.theme.DarkGrey
 import com.brentcodes.munch.ui.theme.LightGrey
 import com.brentcodes.munch.ui.theme.MainGreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CleanMainScreen(modifier: Modifier = Modifier) {
+fun CleanMainScreen(modifier: Modifier = Modifier, navController: NavController) {
     val padding = PaddingValues(horizontal = 20.dp)
     val filtersOpen = remember { mutableStateOf(false) }
     val bottomSheetState = rememberModalBottomSheetState()
@@ -74,7 +78,8 @@ fun CleanMainScreen(modifier: Modifier = Modifier) {
             verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
             item { LogoSection(paddingValues = padding) }
-            item { SearchBarSection(paddingValues = padding, filtersOpen = filtersOpen.value, onFilterClick = { filtersOpen.value = !filtersOpen.value }) }
+            item { CustomSearchBar(paddingValues = padding, hasFilters = false, readOnly = true, onClick = { navController.navigate(Screen.Search.route) }) }
+            //item { SearchBarSection(paddingValues = padding, filtersOpen = filtersOpen.value, onFilterClick = { filtersOpen.value = !filtersOpen.value }) }
             item { CategoriesSection(paddingValues = padding) }
             item { RecipesSection(paddingValues = padding) }
             item { RandomRecipeSection(paddingValues = padding) }
@@ -116,6 +121,7 @@ fun SearchBarSection(modifier: Modifier = Modifier, paddingValues: PaddingValues
         modifier = modifier.padding(paddingValues = paddingValues)
     ) {
         OutlinedTextField(
+            readOnly = true,
             value = searchBar.value,
             onValueChange = { searchBar.value} ,
             maxLines = 1,
