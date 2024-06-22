@@ -1,5 +1,6 @@
 package com.brentcodes.munch.ui.screens.search
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,6 +12,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.brentcodes.munch.ui.components.CustomSearchBar
+import com.brentcodes.munch.ui.components.RecipeCard
 import com.brentcodes.munch.ui.components.SearchBarSuggestions
 
 @Composable
@@ -20,13 +22,16 @@ fun SearchScreen(modifier: Modifier = Modifier) {
     val query by vm.searchQuery.collectAsState()
     Column(modifier.fillMaxSize()) {
         LazyColumn(
-            Modifier.fillMaxSize()
+            Modifier.fillMaxSize(),
+            contentPadding = PaddingValues(20.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             item {
                 CustomSearchBar(paddingValues = padding, hasFilters = true, value = query, onValueChanged = {value -> vm.setSearchQuery(value) })
             }
             items(20) {
-                SearchBarSuggestions(suggestion = it.toString())
+                //SearchBarSuggestions(suggestion = it.toString())
+                RecipeCard()
             }
         }
     }
