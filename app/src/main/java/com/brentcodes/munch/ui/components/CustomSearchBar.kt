@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Menu
 import androidx.compose.material.icons.rounded.Search
@@ -22,6 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import com.brentcodes.munch.ui.theme.MainGreen
 
@@ -35,7 +38,8 @@ fun CustomSearchBar(
     readOnly: Boolean = false,
     value: String = "",
     onValueChanged: (String) -> Unit = {},
-    onClick: () -> Unit = { }
+    onClick: () -> Unit = { },
+    onSearch: () -> Unit = { }
 
 ) {
     val source = remember { MutableInteractionSource() }
@@ -74,7 +78,9 @@ fun CustomSearchBar(
                 }
             },
             modifier = Modifier.fillMaxWidth(),
-            interactionSource = source
+            interactionSource = source,
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+            keyboardActions = KeyboardActions(onSearch = { onSearch() })
         )
     }
 }

@@ -2,9 +2,13 @@ package com.brentcodes.munch.ui.screens.search
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.brentcodes.munch.model.RecipeApiClient
+import com.brentcodes.munch.model.RecipeApiService
+import com.brentcodes.recipesapplication.model.spoonaculardata.SpoonacularResult
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
 class SearchScreenViewModel : ViewModel() {
     private val _searchQuery: MutableStateFlow<String> = MutableStateFlow("")
@@ -22,11 +26,22 @@ class SearchScreenViewModel : ViewModel() {
     private val _selectedIntolerances: MutableStateFlow<List<String>> = MutableStateFlow(emptyList())
     val selectedIntolerances = _selectedIntolerances.stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
 
+    private val _results: MutableStateFlow<SpoonacularResult> = MutableStateFlow(SpoonacularResult())
+    val results = _results.stateIn(viewModelScope, SharingStarted.Lazily, SpoonacularResult())
+
     fun setSearchQuery(query: String) {
         _searchQuery.value = query
     }
 
-/*    fun selectCategory(category: String) {
-
-    }*/
+    fun search() {
+        viewModelScope.launch {
+            val response: SpoonacularResult = try {
+                RecipeApiClient.recipeApiService.getComplexSearch(query = searchQuery.value)
+            } catch (e: Exception) {
+                println(e.message)
+                SpoonacularResult()
+            }
+            _results.value = response
+        }
+    }
 }

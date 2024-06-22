@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.brentcodes.recipesapplication.model.spoonaculardata.Results
 
 @Composable
 fun RecipeCard(modifier: Modifier = Modifier) {
@@ -39,6 +40,39 @@ fun RecipeCard(modifier: Modifier = Modifier) {
                 fontWeight = FontWeight.Bold,
                 fontSize = 16.sp
                 )
+            Text("Brief summary of the recipe here, talking about flavours and other components that may educate a user on what to expect",
+                maxLines = 1,
+                fontSize = 12.sp,
+                overflow = TextOverflow.Ellipsis,
+                color = Color.Gray
+            )
+            Text(
+                "Health rating? Calories? Time it takes?",
+                fontSize = 12.sp
+            )
+        }
+    }
+}
+
+@Composable
+fun RecipeCardTest(modifier: Modifier = Modifier, result: Results) {
+    Column(
+        modifier = modifier.clip(RoundedCornerShape(10.dp)).border(1.dp, Color.Green)
+    ) {
+        AsyncImage(
+            model = result.image,
+            contentDescription = "Recipe Image",
+            modifier = Modifier.fillMaxWidth().height(160.dp),
+            contentScale = ContentScale.Crop
+        )
+        Column(
+            modifier = Modifier.fillMaxWidth().height(80.dp)
+        ) {
+            Text(
+                result.title?: "Title",
+                fontWeight = FontWeight.Bold,
+                fontSize = 16.sp
+            )
             Text("Brief summary of the recipe here, talking about flavours and other components that may educate a user on what to expect",
                 maxLines = 1,
                 fontSize = 12.sp,
