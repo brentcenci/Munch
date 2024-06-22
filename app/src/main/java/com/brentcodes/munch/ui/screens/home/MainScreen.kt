@@ -53,14 +53,13 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.brentcodes.munch.R
 import com.brentcodes.munch.ui.CATEGORIES
 import com.brentcodes.munch.ui.CUISINES
 import com.brentcodes.munch.ui.DIETS
 import com.brentcodes.munch.ui.INTOLERANCES
 import com.brentcodes.munch.ui.Screen
-import com.brentcodes.munch.ui.screens.CustomSearchBar
+import com.brentcodes.munch.ui.components.CustomSearchBar
 import com.brentcodes.munch.ui.theme.DarkGrey
 import com.brentcodes.munch.ui.theme.LightGrey
 import com.brentcodes.munch.ui.theme.MainGreen
@@ -79,7 +78,6 @@ fun CleanMainScreen(modifier: Modifier = Modifier, navController: NavController)
         ) {
             item { LogoSection(paddingValues = padding) }
             item { CustomSearchBar(paddingValues = padding, hasFilters = false, readOnly = true, onClick = { navController.navigate(Screen.Search.route) }) }
-            //item { SearchBarSection(paddingValues = padding, filtersOpen = filtersOpen.value, onFilterClick = { filtersOpen.value = !filtersOpen.value }) }
             item { CategoriesSection(paddingValues = padding) }
             item { RecipesSection(paddingValues = padding) }
             item { RandomRecipeSection(paddingValues = padding) }
@@ -103,41 +101,6 @@ fun LogoSection(modifier: Modifier = Modifier, paddingValues: PaddingValues) {
                 MainGreen
             ),
             modifier = Modifier.align(Alignment.Center)
-        )
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun SearchBarSection(modifier: Modifier = Modifier, paddingValues: PaddingValues, filtersOpen: Boolean, onFilterClick: () -> Unit = { }) {
-    val searchBar = remember { mutableStateOf("") }
-    val filterIconColors = if (!filtersOpen) {
-        IconButtonDefaults.iconButtonColors(containerColor = Color.Transparent, contentColor = Color.Black)
-    } else {
-        IconButtonDefaults.iconButtonColors(containerColor = MainGreen, contentColor = Color.White)
-    }
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier.padding(paddingValues = paddingValues)
-    ) {
-        OutlinedTextField(
-            readOnly = true,
-            value = searchBar.value,
-            onValueChange = { searchBar.value} ,
-            maxLines = 1,
-            label = { Text("Search for a recipe") },
-            leadingIcon = { Icon(Icons.Rounded.Search, "Search Icon") },
-            shape = RoundedCornerShape(20.dp),
-            trailingIcon = {
-                IconButton(onClick = { onFilterClick() }, modifier = Modifier
-                    .clip(
-                        RoundedCornerShape(50)
-                    )
-                    .size(40.dp) , colors=  filterIconColors) {
-                    Icon(imageVector = Icons.Rounded.Menu, contentDescription = "Menu Icon")
-                }
-            },
-            modifier = Modifier.fillMaxWidth()
         )
     }
 }
@@ -173,20 +136,6 @@ fun CategoriesSection(modifier: Modifier = Modifier, paddingValues: PaddingValue
                 }
 
             }
-        }
-    }
-}
-
-@Composable
-fun RecipeCard(modifier: Modifier = Modifier) {
-    Column(
-        modifier = modifier.padding(20.dp).clip(RoundedCornerShape(10.dp))
-    ) {
-        Box(modifier = Modifier.fillMaxWidth().height(100.dp)) //Image
-        Column(modifier = Modifier.fillMaxWidth().height(80.dp)) {
-            Text("Recipe Name")
-            Text("Brief summary of the recipe here, talking about flavours and other components that may educate a user on what to expect")
-            Text("Health rating? Calories? Time it takes?")
         }
     }
 }

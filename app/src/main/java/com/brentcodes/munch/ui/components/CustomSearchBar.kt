@@ -1,4 +1,4 @@
-package com.brentcodes.munch.ui.screens
+package com.brentcodes.munch.ui.components
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
