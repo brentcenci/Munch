@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.brentcodes.munch.model.RecipeApiClient
 import com.brentcodes.munch.model.RecipeApiService
+import com.brentcodes.munch.model.spoonacular.AutocompleteResponse
 import com.brentcodes.recipesapplication.model.spoonaculardata.SpoonacularResult
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -29,8 +30,19 @@ class SearchScreenViewModel : ViewModel() {
     private val _results: MutableStateFlow<SpoonacularResult> = MutableStateFlow(SpoonacularResult())
     val results = _results.stateIn(viewModelScope, SharingStarted.Lazily, SpoonacularResult())
 
+    private val _suggestions: MutableStateFlow<AutocompleteResponse> = MutableStateFlow(AutocompleteResponse())
+    val suggestions = _suggestions.stateIn(viewModelScope, SharingStarted.Lazily, AutocompleteResponse())
+
     fun setSearchQuery(query: String) {
         _searchQuery.value = query
+        viewModelScope.launch {
+            try {
+                val response: AutocompleteResponse = RecipeApiClient.recipeApiService.getAutocompleteSuggestions(query = query)
+                _suggestions.value = response
+            } catch (e: Exception) {
+                println(e.message)
+            }
+        }
     }
 
     fun search() {

@@ -23,6 +23,7 @@ fun SearchScreen(modifier: Modifier = Modifier) {
     val vm = remember { SearchScreenViewModel() }
     val query by vm.searchQuery.collectAsState()
     val results by vm.results.collectAsState()
+    val suggestions by vm.suggestions.collectAsState()
     Column(modifier.fillMaxSize()) {
         LazyColumn(
             Modifier.fillMaxSize(),
@@ -32,6 +33,12 @@ fun SearchScreen(modifier: Modifier = Modifier) {
             item {
                 CustomSearchBar(paddingValues = padding, hasFilters = true, value = query, onValueChanged = {value -> vm.setSearchQuery(value) }, onSearch = { vm.search() })
             }
+            if (results.number == null && suggestions.isNotEmpty()) {
+                items(suggestions) {
+                    SearchBarSuggestions(suggestion = it.title)
+                }
+            }
+
             if (results.number != null) {
                 items(results.results) { result ->
                     RecipeCardTest(result = result)
