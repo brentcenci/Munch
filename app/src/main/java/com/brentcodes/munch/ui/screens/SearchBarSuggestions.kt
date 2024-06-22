@@ -13,7 +13,7 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun SearchBarSuggestions(modifier: Modifier = Modifier, suggestion: String = "Suggestion", onClick: (String) -> Unit = { }) {
-    Box(modifier.fillMaxWidth().height(80.dp).clickable { onClick(suggestion) }, contentAlignment = Alignment.Center) {
+    Box(modifier.fillMaxWidth().height(40.dp).clickable { onClick(suggestion) }, contentAlignment = Alignment.Center) {
         Text(suggestion)
     }
 }
