@@ -80,7 +80,7 @@ fun CleanMainScreen(modifier: Modifier = Modifier, navController: NavController)
             item { CustomSearchBar(paddingValues = padding, hasFilters = false, readOnly = true, onClick = { navController.navigate(Screen.Search.route) }) }
             item { CategoriesSection(paddingValues = padding) }
             item { RecipesSection(paddingValues = padding) }
-            item { RandomRecipeSection(paddingValues = padding) }
+            item { RandomRecipeSection(paddingValues = padding, onClick = { vm.randomRecipe() }) }
         }
         FiltersBottomSheet(state = bottomSheetState, dismiss = { filtersOpen.value = false}, openState = filtersOpen.value )
     }
@@ -184,7 +184,7 @@ fun RecipesSection(modifier: Modifier = Modifier, paddingValues: PaddingValues) 
 }
 
 @Composable
-fun RandomRecipeSection(modifier: Modifier = Modifier, paddingValues: PaddingValues) {
+fun RandomRecipeSection(modifier: Modifier = Modifier, paddingValues: PaddingValues, onClick: () -> Unit = { }) {
     Column{
         Box(
             modifier = Modifier
@@ -197,7 +197,7 @@ fun RandomRecipeSection(modifier: Modifier = Modifier, paddingValues: PaddingVal
             Column {
                 Text(text = "Can't decide?", color = Color.White, fontSize = 30.sp)
                 Text(text = "Let us make your life easier.", color = Color.White, fontSize = 16.sp)
-                Button(onClick = { /*TODO*/ }, modifier = Modifier
+                Button(onClick = { onClick() }, modifier = Modifier
                     .padding(10.dp)
                     .fillMaxWidth()
                     .height(70.dp), shape = RoundedCornerShape(10.dp), colors = ButtonDefaults.buttonColors(containerColor = MainGreen, contentColor = Color.White)) {

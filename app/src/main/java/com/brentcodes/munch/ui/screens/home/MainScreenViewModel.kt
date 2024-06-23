@@ -21,4 +21,15 @@ class MainScreenViewModel: ViewModel() {
             println(results.toString())
         }
     }
+
+    fun randomRecipe() {
+        viewModelScope.launch {
+            try {
+                val result = RecipeApiClient.recipeApiService.getRandomRecipe()
+                println(result.recipes.first().title)
+            } catch (e: Exception) {
+                println(e.message)
+            }
+        }
+    }
 }
