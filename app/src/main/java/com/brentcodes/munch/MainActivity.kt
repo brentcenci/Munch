@@ -33,6 +33,7 @@ import com.brentcodes.munch.ui.Screen
 import com.brentcodes.munch.ui.screens.home.MainScreenViewModel
 import com.brentcodes.munch.ui.screens.saved.SavedScreen
 import com.brentcodes.munch.ui.screens.search.SearchScreen
+import com.brentcodes.munch.ui.screens.search.SearchScreenViewModel
 import com.brentcodes.munch.ui.theme.MunchTheme
 
 class MainActivity : ComponentActivity() {
@@ -81,7 +82,8 @@ class MainActivity : ComponentActivity() {
                             CleanMainScreen(modifier = Modifier.padding(padding), navController = navController, viewModel = viewModel)
                         }
                         composable(route = Screen.Search.route) {
-                            SearchScreen(modifier = Modifier.padding(padding))
+                            val viewModel: SearchScreenViewModel = ViewModelProvider(navController.getViewModelStoreOwner(navController.graph.id))[SearchScreenViewModel::class.java]
+                            SearchScreen(modifier = Modifier.padding(padding), viewModel = viewModel)
                         }
                         composable(route = Screen.Saved.route) {
                             SavedScreen(modifier = Modifier.padding(padding))

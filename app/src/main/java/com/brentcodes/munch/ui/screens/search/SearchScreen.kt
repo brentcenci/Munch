@@ -18,12 +18,12 @@ import com.brentcodes.munch.ui.components.RecipeCardTest
 import com.brentcodes.munch.ui.components.SearchBarSuggestions
 
 @Composable
-fun SearchScreen(modifier: Modifier = Modifier) {
+fun SearchScreen(modifier: Modifier = Modifier, viewModel: SearchScreenViewModel) {
     val padding = PaddingValues(horizontal = 20.dp)
-    val vm = remember { SearchScreenViewModel() }
-    val query by vm.searchQuery.collectAsState()
-    val results by vm.results.collectAsState()
-    val suggestions by vm.suggestions.collectAsState()
+    //val vm = remember { SearchScreenViewModel() }
+    val query by viewModel.searchQuery.collectAsState()
+    val results by viewModel.results.collectAsState()
+    val suggestions by viewModel.suggestions.collectAsState()
     Column(modifier.fillMaxSize()) {
         LazyColumn(
             Modifier.fillMaxSize(),
@@ -31,7 +31,7 @@ fun SearchScreen(modifier: Modifier = Modifier) {
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             item {
-                CustomSearchBar(paddingValues = padding, hasFilters = true, value = query, onValueChanged = {value -> vm.setSearchQuery(value) }, onSearch = { vm.search() })
+                CustomSearchBar(paddingValues = padding, hasFilters = true, value = query, onValueChanged = {value -> viewModel.setSearchQuery(value) }, onSearch = { viewModel.search() })
             }
             if (results.number == null && suggestions.isNotEmpty()) {
                 items(suggestions) {
