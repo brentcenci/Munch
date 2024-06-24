@@ -52,7 +52,7 @@ class MainActivity : ComponentActivity() {
                         ) {
                             NavigationBarItem(alwaysShowLabel = false, label = {Text("Home")}, icon = {Icon(Icons.Default.Home, "Home Icon")}, onClick = {
                                 if (selectedRoute != Screen.Home.route) {
-                                    navController.navigate(Screen.Home.route)
+                                    navController.navigate(Screen.Home.route) /*{ popUpTo(Screen.Home.route) { saveState = true } }*/
                                 }
 
 

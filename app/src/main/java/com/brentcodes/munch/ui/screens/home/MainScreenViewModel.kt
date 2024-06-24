@@ -1,5 +1,6 @@
 package com.brentcodes.munch.ui.screens.home
 
+import androidx.compose.runtime.remember
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.brentcodes.munch.model.RecipeApiClient
@@ -17,6 +18,7 @@ class MainScreenViewModel: ViewModel() {
 
     init {
         viewModelScope.launch {
+            println("Doing Init for Main Screen")
             try {
                 val results = RecipeApiClient.recipeApiService.getQuickMeals15()
                 println("Main Screen, View Model, Quick 15: $results")

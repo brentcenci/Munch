@@ -33,6 +33,10 @@ class SearchScreenViewModel : ViewModel() {
     private val _suggestions: MutableStateFlow<AutocompleteResponse> = MutableStateFlow(AutocompleteResponse())
     val suggestions = _suggestions.stateIn(viewModelScope, SharingStarted.Lazily, AutocompleteResponse())
 
+    init {
+        println("Doing Init for Search Screen")
+    }
+
     fun setSearchQuery(query: String) {
         _searchQuery.value = query
         viewModelScope.launch {

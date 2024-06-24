@@ -42,6 +42,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -55,6 +56,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.brentcodes.munch.R
 import com.brentcodes.munch.ui.CATEGORIES
@@ -75,7 +77,7 @@ fun CleanMainScreen(modifier: Modifier = Modifier, navController: NavController)
     val padding = PaddingValues(horizontal = 20.dp)
     val filtersOpen = remember { mutableStateOf(false) }
     val bottomSheetState = rememberModalBottomSheetState()
-    val vm = remember { MainScreenViewModel() }
+    val vm : MainScreenViewModel = viewModel()
     val quick15 by vm.quick15.collectAsState()
     Column(modifier = modifier) {
         LazyColumn(
