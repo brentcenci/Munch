@@ -38,6 +38,8 @@ import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -49,6 +51,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -60,9 +63,11 @@ import com.brentcodes.munch.ui.DIETS
 import com.brentcodes.munch.ui.INTOLERANCES
 import com.brentcodes.munch.ui.Screen
 import com.brentcodes.munch.ui.components.CustomSearchBar
+import com.brentcodes.munch.ui.components.RecipeCardTest
 import com.brentcodes.munch.ui.theme.DarkGrey
 import com.brentcodes.munch.ui.theme.LightGrey
 import com.brentcodes.munch.ui.theme.MainGreen
+import com.brentcodes.recipesapplication.model.spoonaculardata.SpoonacularResult
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -71,6 +76,7 @@ fun CleanMainScreen(modifier: Modifier = Modifier, navController: NavController)
     val filtersOpen = remember { mutableStateOf(false) }
     val bottomSheetState = rememberModalBottomSheetState()
     val vm = remember { MainScreenViewModel() }
+    val quick15 by vm.quick15.collectAsState()
     Column(modifier = modifier) {
         LazyColumn(
             contentPadding = PaddingValues(vertical = 20.dp),
@@ -79,7 +85,7 @@ fun CleanMainScreen(modifier: Modifier = Modifier, navController: NavController)
             item { LogoSection(paddingValues = padding) }
             item { CustomSearchBar(paddingValues = padding, hasFilters = false, readOnly = true, onClick = { navController.navigate(Screen.Search.route) }) }
             item { CategoriesSection(paddingValues = padding) }
-            item { RecipesSection(paddingValues = padding) }
+            item { RecipesSection(paddingValues = padding, recipes = quick15) }
             item { RandomRecipeSection(paddingValues = padding, onClick = { vm.randomRecipe() }) }
         }
         FiltersBottomSheet(state = bottomSheetState, dismiss = { filtersOpen.value = false}, openState = filtersOpen.value )
@@ -141,44 +147,22 @@ fun CategoriesSection(modifier: Modifier = Modifier, paddingValues: PaddingValue
 }
 
 @Composable
-fun RecipesSection(modifier: Modifier = Modifier, paddingValues: PaddingValues) {
-    MainScreenTitleText(modifier = modifier.padding(paddingValues), text = "Suggested")
+fun RecipesSection(modifier: Modifier = Modifier, paddingValues: PaddingValues, recipes: SpoonacularResult) {
+    MainScreenTitleText(modifier = modifier.padding(paddingValues), text = "Quick Meals", subtitle = "Make these meals in 15 minutes or less!")
     LazyRow(
         contentPadding = PaddingValues(horizontal = 20.dp),
         horizontalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        items(10) {
-            /*Box(
-                modifier = Modifier
-                    .padding(top = 5.dp, end = 10.dp, bottom = 5.dp)
-                    .size(width = 200.dp, height = 300.dp)
-                    .background(LightGrey, RoundedCornerShape(10.dp))
-                    .padding(10.dp)
-            ) {
-                Text(it.toString())
-            }*/
-            val gradient = remember {
+        items(recipes.results) { result ->
+
+            /*val gradient = remember {
                 Brush.verticalGradient(
                     colors = listOf(Color.Transparent, DarkGrey),
                     startY = 0F,
                     endY = Float.POSITIVE_INFINITY
                 )
-            }
-            Box(
-                modifier = Modifier
-                    .padding(top = 5.dp, bottom = 5.dp)
-                    .size(width = 170.dp, height = 250.dp)
-                    .background(LightGrey, RoundedCornerShape(10.dp))
-                    .background(gradient, RoundedCornerShape(10.dp))
-                    .padding(10.dp)
-            ) {
-                Column(
-                    modifier = Modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.Bottom
-                ) {
-                    Text("Recipe Name", color = Color.White, fontWeight = FontWeight.Bold)
-                }
-            }
+            }*/
+            RecipeCardTest(modifier = Modifier.width(200.dp), result = result)
         }
     }
 }
@@ -210,17 +194,28 @@ fun RandomRecipeSection(modifier: Modifier = Modifier, paddingValues: PaddingVal
 }
 
 @Composable
-fun MainScreenTitleText(modifier: Modifier = Modifier, text: String, viewAll: Boolean = true) {
-    Row(modifier = modifier) {
-        Text(
-            text = text,
-            color = Color.Black,
-            fontSize = 20.sp,
-            fontWeight = FontWeight.SemiBold
-        )
-        Spacer(modifier = Modifier.weight(1f))
-        if (viewAll) Text("View all", textDecoration = TextDecoration.Underline)
+fun MainScreenTitleText(modifier: Modifier = Modifier, text: String, viewAll: Boolean = true, subtitle: String? = null) {
+    Column(modifier = modifier) {
+        Row() {
+            Text(
+                text = text,
+                color = Color.Black,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.SemiBold
+            )
+            Spacer(modifier = Modifier.weight(1f))
+            if (viewAll) Text("View all", textDecoration = TextDecoration.Underline)
+        }
+        if (subtitle!= null) {
+            Text(
+                text = subtitle,
+                fontSize = 14.sp,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+        }
     }
+
 
 }
 
