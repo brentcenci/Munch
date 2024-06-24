@@ -1,5 +1,6 @@
 package com.brentcodes.munch.ui.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,6 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
@@ -57,30 +59,29 @@ fun RecipeCard(modifier: Modifier = Modifier) {
 @Composable
 fun RecipeCardTest(modifier: Modifier = Modifier, result: Results) {
     Column(
-        modifier = modifier.clip(RoundedCornerShape(10.dp)).border(1.dp, Color.Green)
+        modifier = modifier.shadow(8.dp, RoundedCornerShape(10.dp))
     ) {
-        AsyncImage(
-            model = result.image,
-            contentDescription = "Recipe Image",
-            modifier = Modifier.fillMaxWidth().height(160.dp),
-            contentScale = ContentScale.Crop
-        )
+        Box(modifier = Modifier.fillMaxWidth().height(160.dp).background(Color.White)) {
+            AsyncImage(
+                model = result.image,
+                contentDescription = "Recipe Image",
+                modifier = Modifier.fillMaxWidth().height(160.dp),
+                contentScale = ContentScale.Crop
+            )
+        }
+
         Column(
-            modifier = Modifier.fillMaxWidth().height(80.dp)
+            modifier = Modifier.fillMaxWidth().height(60.dp).background(Color.White).padding(5.dp)
         ) {
             Text(
                 result.title?: "Title",
                 fontWeight = FontWeight.Bold,
-                fontSize = 16.sp
-            )
-            Text("Brief summary of the recipe here, talking about flavours and other components that may educate a user on what to expect",
+                fontSize = 16.sp,
                 maxLines = 1,
-                fontSize = 12.sp,
-                overflow = TextOverflow.Ellipsis,
-                color = Color.Gray
+                overflow = TextOverflow.Ellipsis
             )
             Text(
-                "Health rating? Calories? Time it takes?",
+                "${result.readyInMinutes} mins, $${result.pricePerServing}",
                 fontSize = 12.sp
             )
         }
