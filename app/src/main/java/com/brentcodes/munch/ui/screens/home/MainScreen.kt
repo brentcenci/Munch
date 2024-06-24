@@ -73,12 +73,12 @@ import com.brentcodes.recipesapplication.model.spoonaculardata.SpoonacularResult
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CleanMainScreen(modifier: Modifier = Modifier, navController: NavController) {
+fun CleanMainScreen(modifier: Modifier = Modifier, navController: NavController, viewModel: MainScreenViewModel) {
     val padding = PaddingValues(horizontal = 20.dp)
     val filtersOpen = remember { mutableStateOf(false) }
     val bottomSheetState = rememberModalBottomSheetState()
-    val vm : MainScreenViewModel = viewModel()
-    val quick15 by vm.quick15.collectAsState()
+    //val vm : MainScreenViewModel = viewModel()
+    val quick15 by viewModel.quick15.collectAsState()
     Column(modifier = modifier) {
         LazyColumn(
             contentPadding = PaddingValues(vertical = 20.dp),
@@ -88,7 +88,7 @@ fun CleanMainScreen(modifier: Modifier = Modifier, navController: NavController)
             item { CustomSearchBar(paddingValues = padding, hasFilters = false, readOnly = true, onClick = { navController.navigate(Screen.Search.route) }) }
             item { CategoriesSection(paddingValues = padding) }
             item { RecipesSection(paddingValues = padding, recipes = quick15) }
-            item { RandomRecipeSection(paddingValues = padding, onClick = { vm.randomRecipe() }) }
+            item { RandomRecipeSection(paddingValues = padding, onClick = { viewModel.randomRecipe() }) }
         }
         FiltersBottomSheet(state = bottomSheetState, dismiss = { filtersOpen.value = false}, openState = filtersOpen.value )
     }

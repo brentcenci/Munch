@@ -23,11 +23,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.brentcodes.munch.ui.screens.home.CleanMainScreen
 import com.brentcodes.munch.ui.Screen
+import com.brentcodes.munch.ui.screens.home.MainScreenViewModel
 import com.brentcodes.munch.ui.screens.saved.SavedScreen
 import com.brentcodes.munch.ui.screens.search.SearchScreen
 import com.brentcodes.munch.ui.theme.MunchTheme
@@ -73,7 +76,9 @@ class MainActivity : ComponentActivity() {
                 ) { padding ->
                     NavHost(navController = navController, startDestination = Screen.Home.route) {
                         composable(route = Screen.Home.route) {
-                            CleanMainScreen(modifier = Modifier.padding(padding), navController = navController)
+                            val viewModel: MainScreenViewModel = ViewModelProvider(navController.getViewModelStoreOwner(navController.graph.id))[MainScreenViewModel::class.java]
+                            //val viewModel: MainScreenViewModel = viewModel()
+                            CleanMainScreen(modifier = Modifier.padding(padding), navController = navController, viewModel = viewModel)
                         }
                         composable(route = Screen.Search.route) {
                             SearchScreen(modifier = Modifier.padding(padding))
