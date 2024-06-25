@@ -66,14 +66,16 @@ import com.brentcodes.munch.ui.INTOLERANCES
 import com.brentcodes.munch.ui.Screen
 import com.brentcodes.munch.ui.components.CustomSearchBar
 import com.brentcodes.munch.ui.components.RecipeCardTest
+import com.brentcodes.munch.ui.screens.recipe.RecipeViewModel
 import com.brentcodes.munch.ui.theme.DarkGrey
 import com.brentcodes.munch.ui.theme.LightGrey
 import com.brentcodes.munch.ui.theme.MainGreen
+import com.brentcodes.recipesapplication.model.spoonaculardata.Results
 import com.brentcodes.recipesapplication.model.spoonaculardata.SpoonacularResult
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CleanMainScreen(modifier: Modifier = Modifier, navController: NavController, viewModel: MainScreenViewModel) {
+fun CleanMainScreen(modifier: Modifier = Modifier, navController: NavController, viewModel: MainScreenViewModel, recipeViewModel: RecipeViewModel) {
     val padding = PaddingValues(horizontal = 20.dp)
     val filtersOpen = remember { mutableStateOf(false) }
     val bottomSheetState = rememberModalBottomSheetState()
@@ -87,7 +89,14 @@ fun CleanMainScreen(modifier: Modifier = Modifier, navController: NavController,
             item { LogoSection(paddingValues = padding) }
             item { CustomSearchBar(paddingValues = padding, hasFilters = false, readOnly = true, onClick = { navController.navigate(Screen.Search.route) }) }
             item { CategoriesSection(paddingValues = padding) }
-            item { RecipesSection(paddingValues = padding, recipes = quick15) }
+            item { RecipesSection(
+                paddingValues = padding,
+                recipes = quick15,
+                onClick = { recipe ->
+                    recipeViewModel.setCurrentRecipe(recipe)
+                    navController.navigate(Screen.Recipe.route)
+                })
+            }
             item { RandomRecipeSection(paddingValues = padding, onClick = { viewModel.randomRecipe() }) }
         }
         FiltersBottomSheet(state = bottomSheetState, dismiss = { filtersOpen.value = false}, openState = filtersOpen.value )
@@ -149,7 +158,7 @@ fun CategoriesSection(modifier: Modifier = Modifier, paddingValues: PaddingValue
 }
 
 @Composable
-fun RecipesSection(modifier: Modifier = Modifier, paddingValues: PaddingValues, recipes: SpoonacularResult) {
+fun RecipesSection(modifier: Modifier = Modifier, paddingValues: PaddingValues, recipes: SpoonacularResult, onClick: (Results) -> Unit) {
     MainScreenTitleText(modifier = modifier.padding(paddingValues), text = "Quick Meals", subtitle = "Make these meals in 15 minutes or less!")
     LazyRow(
         contentPadding = PaddingValues(horizontal = 20.dp),
@@ -164,7 +173,7 @@ fun RecipesSection(modifier: Modifier = Modifier, paddingValues: PaddingValues, 
                     endY = Float.POSITIVE_INFINITY
                 )
             }*/
-            RecipeCardTest(modifier = Modifier.width(200.dp), result = result)
+            RecipeCardTest(modifier = Modifier.width(200.dp), result = result, onClick = onClick)
         }
     }
 }

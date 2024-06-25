@@ -31,10 +31,13 @@ import androidx.navigation.compose.rememberNavController
 import com.brentcodes.munch.ui.screens.home.CleanMainScreen
 import com.brentcodes.munch.ui.Screen
 import com.brentcodes.munch.ui.screens.home.MainScreenViewModel
+import com.brentcodes.munch.ui.screens.recipe.RecipeScreen
+import com.brentcodes.munch.ui.screens.recipe.RecipeViewModel
 import com.brentcodes.munch.ui.screens.saved.SavedScreen
 import com.brentcodes.munch.ui.screens.search.SearchScreen
 import com.brentcodes.munch.ui.screens.search.SearchScreenViewModel
 import com.brentcodes.munch.ui.theme.MunchTheme
+import com.brentcodes.recipesapplication.model.spoonaculardata.Results
 
 class MainActivity : ComponentActivity() {
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -48,6 +51,7 @@ class MainActivity : ComponentActivity() {
                 navController.addOnDestinationChangedListener { _, destination, _ ->
                     selectedRoute = destination.route
                 }
+                val recipeViewModel: RecipeViewModel = viewModel()
                 Scaffold(
                     bottomBar = {
                         NavigationBar(
@@ -79,14 +83,17 @@ class MainActivity : ComponentActivity() {
                         composable(route = Screen.Home.route) {
                             val viewModel: MainScreenViewModel = ViewModelProvider(navController.getViewModelStoreOwner(navController.graph.id))[MainScreenViewModel::class.java]
                             //val viewModel: MainScreenViewModel = viewModel()
-                            CleanMainScreen(modifier = Modifier.padding(padding), navController = navController, viewModel = viewModel)
+                            CleanMainScreen(modifier = Modifier.padding(padding), navController = navController, viewModel = viewModel, recipeViewModel = recipeViewModel)
                         }
                         composable(route = Screen.Search.route) {
                             val viewModel: SearchScreenViewModel = ViewModelProvider(navController.getViewModelStoreOwner(navController.graph.id))[SearchScreenViewModel::class.java]
-                            SearchScreen(modifier = Modifier.padding(padding), viewModel = viewModel)
+                            SearchScreen(modifier = Modifier.padding(padding), viewModel = viewModel, recipeViewModel = recipeViewModel, navController = navController)
                         }
                         composable(route = Screen.Saved.route) {
                             SavedScreen(modifier = Modifier.padding(padding))
+                        }
+                        composable(route = Screen.Recipe.route) {
+                            RecipeScreen(recipeViewModel = recipeViewModel)
                         }
                     }
 

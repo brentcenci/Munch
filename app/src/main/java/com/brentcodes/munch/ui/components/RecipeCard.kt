@@ -2,6 +2,7 @@ package com.brentcodes.munch.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -57,9 +58,9 @@ fun RecipeCard(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun RecipeCardTest(modifier: Modifier = Modifier, result: Results) {
+fun RecipeCardTest(modifier: Modifier = Modifier, result: Results, onClick: (Results) -> Unit) {
     Column(
-        modifier = modifier.shadow(8.dp, RoundedCornerShape(10.dp))
+        modifier = modifier.shadow(8.dp, RoundedCornerShape(10.dp)).clickable { onClick(result) }
     ) {
         Box(modifier = Modifier.fillMaxWidth().height(160.dp).background(Color.White)) {
             AsyncImage(

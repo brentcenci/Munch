@@ -12,13 +12,17 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.navOptions
+import com.brentcodes.munch.ui.Screen
 import com.brentcodes.munch.ui.components.CustomSearchBar
 import com.brentcodes.munch.ui.components.RecipeCard
 import com.brentcodes.munch.ui.components.RecipeCardTest
 import com.brentcodes.munch.ui.components.SearchBarSuggestions
+import com.brentcodes.munch.ui.screens.recipe.RecipeViewModel
 
 @Composable
-fun SearchScreen(modifier: Modifier = Modifier, viewModel: SearchScreenViewModel) {
+fun SearchScreen(modifier: Modifier = Modifier, viewModel: SearchScreenViewModel, recipeViewModel: RecipeViewModel, navController : NavController ) {
     val padding = PaddingValues(horizontal = 20.dp)
     //val vm = remember { SearchScreenViewModel() }
     val query by viewModel.searchQuery.collectAsState()
@@ -41,7 +45,10 @@ fun SearchScreen(modifier: Modifier = Modifier, viewModel: SearchScreenViewModel
 
             if (results.number != null) {
                 items(results.results) { result ->
-                    RecipeCardTest(result = result)
+                    RecipeCardTest(result = result, onClick = {recipe ->
+                        recipeViewModel.setCurrentRecipe(recipe)
+                        navController.navigate(Screen.Recipe.route)
+                    })
                 }
             }
         }
