@@ -24,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -42,7 +43,7 @@ fun RecipeScreen(modifier: Modifier = Modifier, viewModel: RecipeScreenViewModel
     val instructionsExpanded by viewModel.expandedInstructions.collectAsState()
     val nutritionExpanded by viewModel.expandedNutrition.collectAsState()
 
-    LazyColumn(modifier = Modifier.fillMaxWidth()) {
+    LazyColumn(modifier = modifier.fillMaxWidth()) {
         item {
             AsyncImage(
                 model = recipe.image,
@@ -83,7 +84,7 @@ fun RecipeScreen(modifier: Modifier = Modifier, viewModel: RecipeScreenViewModel
         }
         item {
             DropdownSection(
-                "Ingredient",
+                "Ingredients",
                 color = LightestGreen,
                 expanded = ingredientsExpanded,
                 onClick = { viewModel.toggleIngredients() }
@@ -95,6 +96,7 @@ fun RecipeScreen(modifier: Modifier = Modifier, viewModel: RecipeScreenViewModel
             DropdownSection(
                 "Instructions",
                 color = LighterGreen,
+                colorAbove = LightestGreen,
                 expanded = instructionsExpanded,
                 onClick = { viewModel.toggleInstructions() }
             ) {
@@ -105,6 +107,8 @@ fun RecipeScreen(modifier: Modifier = Modifier, viewModel: RecipeScreenViewModel
             DropdownSection(
                 "Nutrition",
                 color = MainGreen,
+                colorAbove = LighterGreen,
+                last = true,
                 expanded = nutritionExpanded,
                 onClick = { viewModel.toggleNutrition() }
             ) {
@@ -115,10 +119,12 @@ fun RecipeScreen(modifier: Modifier = Modifier, viewModel: RecipeScreenViewModel
 }
 
 @Composable
-fun DropdownSection(title: String, color: Color = LightestGreen, expanded: Boolean, onClick: () -> Unit = { }, content: @Composable () -> Unit) {
+fun DropdownSection(title: String, color: Color = LightestGreen, colorAbove: Color = Color.Transparent, last: Boolean = false, expanded: Boolean, onClick: () -> Unit = { }, content: @Composable () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
+            .clip(shape = if (last) RoundedCornerShape(bottomStart = 20.dp, bottomEnd = 20.dp) else RectangleShape)
+            .background(colorAbove)
             .background(color, RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
     ) {
         Row(

@@ -94,7 +94,7 @@ class MainActivity : ComponentActivity() {
                         }
                         composable(route = Screen.Recipe.route) {
                             val viewModel: RecipeScreenViewModel = ViewModelProvider(navController.getViewModelStoreOwner(navController.graph.id))[RecipeScreenViewModel::class.java]
-                            RecipeScreen(viewModel = viewModel, recipeViewModel = recipeViewModel)
+                            RecipeScreen(modifier = Modifier.padding(padding), viewModel = viewModel, recipeViewModel = recipeViewModel)
                         }
                     }
 
