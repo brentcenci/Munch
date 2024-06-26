@@ -1,9 +1,8 @@
-package com.brentcodes.munch.ui.screens.recipe
+package com.brentcodes.munch.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.brentcodes.recipesapplication.model.spoonaculardata.Results
-import com.brentcodes.recipesapplication.model.spoonaculardata.SpoonacularResult
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn

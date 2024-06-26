@@ -32,12 +32,12 @@ import com.brentcodes.munch.ui.screens.home.CleanMainScreen
 import com.brentcodes.munch.ui.Screen
 import com.brentcodes.munch.ui.screens.home.MainScreenViewModel
 import com.brentcodes.munch.ui.screens.recipe.RecipeScreen
-import com.brentcodes.munch.ui.screens.recipe.RecipeViewModel
+import com.brentcodes.munch.ui.RecipeViewModel
+import com.brentcodes.munch.ui.screens.recipe.RecipeScreenViewModel
 import com.brentcodes.munch.ui.screens.saved.SavedScreen
 import com.brentcodes.munch.ui.screens.search.SearchScreen
 import com.brentcodes.munch.ui.screens.search.SearchScreenViewModel
 import com.brentcodes.munch.ui.theme.MunchTheme
-import com.brentcodes.recipesapplication.model.spoonaculardata.Results
 
 class MainActivity : ComponentActivity() {
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -93,7 +93,8 @@ class MainActivity : ComponentActivity() {
                             SavedScreen(modifier = Modifier.padding(padding))
                         }
                         composable(route = Screen.Recipe.route) {
-                            RecipeScreen(recipeViewModel = recipeViewModel)
+                            val viewModel: RecipeScreenViewModel = ViewModelProvider(navController.getViewModelStoreOwner(navController.graph.id))[RecipeScreenViewModel::class.java]
+                            RecipeScreen(viewModel = viewModel, recipeViewModel = recipeViewModel)
                         }
                     }
 

@@ -13,6 +13,8 @@ val ThemeBlue = Color(0xff175EE0)
 val DarkGrey = Color(30,30,40,255)
 val LightGrey = Color(220, 220, 220, 255)
 val MainGreen = Color(100,180,100,255)
+val LighterGreen = Color(134, 208, 134, 255)
+val LightestGreen = Color(200,240,200,255)
 
 val Purple40 = Color(0xFF6650a4)
 val PurpleGrey40 = Color(0xFF625b71)

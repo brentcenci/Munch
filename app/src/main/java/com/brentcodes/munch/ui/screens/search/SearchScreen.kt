@@ -9,17 +9,14 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import androidx.navigation.navOptions
 import com.brentcodes.munch.ui.Screen
 import com.brentcodes.munch.ui.components.CustomSearchBar
-import com.brentcodes.munch.ui.components.RecipeCard
 import com.brentcodes.munch.ui.components.RecipeCardTest
 import com.brentcodes.munch.ui.components.SearchBarSuggestions
-import com.brentcodes.munch.ui.screens.recipe.RecipeViewModel
+import com.brentcodes.munch.ui.RecipeViewModel
 
 @Composable
 fun SearchScreen(modifier: Modifier = Modifier, viewModel: SearchScreenViewModel, recipeViewModel: RecipeViewModel, navController : NavController ) {
