@@ -3,6 +3,7 @@ package com.brentcodes.munch.ui.screens.recipe
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -31,6 +32,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.brentcodes.munch.ui.RecipeViewModel
+import com.brentcodes.munch.ui.theme.DarkGrey
+import com.brentcodes.munch.ui.theme.DarkerGreen
 import com.brentcodes.munch.ui.theme.LightGrey
 import com.brentcodes.munch.ui.theme.LighterGreen
 import com.brentcodes.munch.ui.theme.LightestGreen
@@ -43,19 +46,26 @@ fun RecipeScreen(modifier: Modifier = Modifier, viewModel: RecipeScreenViewModel
     val instructionsExpanded by viewModel.expandedInstructions.collectAsState()
     val nutritionExpanded by viewModel.expandedNutrition.collectAsState()
 
-    LazyColumn(modifier = modifier.fillMaxWidth()) {
+    val padding = PaddingValues(horizontal = 20.dp)
+
+    LazyColumn(
+        modifier = modifier.fillMaxWidth()
+    ) {
         item {
             AsyncImage(
                 model = recipe.image,
                 contentDescription = "Cover Image",
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(200.dp),
+                    .height(400.dp),
                 contentScale = ContentScale.Crop
             )
         }
         item {
-            Row(modifier = Modifier.padding(20.dp)) {
+            Spacer(Modifier.height(20.dp))
+        }
+        item {
+            Row(modifier = Modifier.padding(padding)) {
                 Text(
                     text = recipe.title ?: "Recipe Title",
                     fontSize = 20.sp,
@@ -66,8 +76,20 @@ fun RecipeScreen(modifier: Modifier = Modifier, viewModel: RecipeScreenViewModel
             }
         }
         item {
+            Row(modifier = Modifier.padding(padding)) {
+                Text(
+                    "Recipe by " + recipe.sourceName,
+                    color = DarkGrey,
+                    fontSize = 14.sp
+                )
+            }
+        }
+        item {
+            Spacer(Modifier.height(20.dp))
+        }
+        item {
             Row(modifier = Modifier
-                .padding(20.dp)
+                .padding(padding)
                 .shadow(10.dp)
                 .background(Color.White, shape = RoundedCornerShape(10.dp))
                 .fillMaxWidth()) {
@@ -81,6 +103,9 @@ fun RecipeScreen(modifier: Modifier = Modifier, viewModel: RecipeScreenViewModel
                     Text("${recipe.readyInMinutes} mins", fontSize = 18.sp)
                 }
             }
+        }
+        item {
+            Spacer(Modifier.height(20.dp))
         }
         item {
             DropdownSection(
@@ -108,9 +133,22 @@ fun RecipeScreen(modifier: Modifier = Modifier, viewModel: RecipeScreenViewModel
                 "Nutrition",
                 color = MainGreen,
                 colorAbove = LighterGreen,
-                last = true,
+                last = false,
                 expanded = nutritionExpanded,
                 onClick = { viewModel.toggleNutrition() }
+            ) {
+                Text("Hey this is expanded")
+            }
+        }
+        item {
+            DropdownSection(
+                "Darker",
+                contentColor = Color.White,
+                color = DarkGrey,
+                colorAbove = MainGreen,
+                last = false,
+                expanded = true,
+                onClick = {  }
             ) {
                 Text("Hey this is expanded")
             }
@@ -119,7 +157,7 @@ fun RecipeScreen(modifier: Modifier = Modifier, viewModel: RecipeScreenViewModel
 }
 
 @Composable
-fun DropdownSection(title: String, color: Color = LightestGreen, colorAbove: Color = Color.Transparent, last: Boolean = false, expanded: Boolean, onClick: () -> Unit = { }, content: @Composable () -> Unit) {
+fun DropdownSection(title: String, contentColor: Color = Color.Black, color: Color = LightestGreen, colorAbove: Color = Color.Transparent, last: Boolean = false, expanded: Boolean, onClick: () -> Unit = { }, content: @Composable () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -135,13 +173,14 @@ fun DropdownSection(title: String, color: Color = LightestGreen, colorAbove: Col
         ) {
             Text(
                 text = title,
+                color = contentColor,
                 fontSize = 20.sp,
                 modifier = Modifier.weight(1f)
             )
             if (expanded) {
-                Icon(Icons.Default.KeyboardArrowUp, "Expanded Icon")
+                Icon(Icons.Default.KeyboardArrowUp, "Expanded Icon", tint = contentColor)
             } else {
-                Icon(Icons.Default.KeyboardArrowDown, "Expanded Icon")
+                Icon(Icons.Default.KeyboardArrowDown, "Expanded Icon", tint = contentColor)
             }
         }
         if (expanded) {
