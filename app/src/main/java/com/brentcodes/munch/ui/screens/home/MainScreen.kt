@@ -75,6 +75,8 @@ fun CleanMainScreen(modifier: Modifier = Modifier, navController: NavController,
     val bottomSheetState = rememberModalBottomSheetState()
     //val vm : MainScreenViewModel = viewModel()
     val quick15 by viewModel.quick15.collectAsState()
+    val desserts by viewModel.desserts.collectAsState()
+    val vegan by viewModel.vegan.collectAsState()
     Column(modifier = modifier) {
         LazyColumn(
             contentPadding = PaddingValues(vertical = 20.dp),
@@ -85,6 +87,8 @@ fun CleanMainScreen(modifier: Modifier = Modifier, navController: NavController,
             item { CategoriesSection(paddingValues = padding) }
             item { RecipesSection(
                 paddingValues = padding,
+                title = "Quick Meals",
+                subtitle = "Make these meals in 15 minutes or less!",
                 recipes = quick15,
                 onClick = { recipe ->
                     recipeViewModel.setCurrentRecipe(recipe)
@@ -94,6 +98,26 @@ fun CleanMainScreen(modifier: Modifier = Modifier, navController: NavController,
             item { RandomRecipeSection(paddingValues = padding, onClick = {
                 viewModel.randomRecipe(recipeViewModel = recipeViewModel, navController= navController)
             }) }
+            item { RecipesSection(
+                paddingValues = padding,
+                title = "Sweet Treats",
+                subtitle = "Try making these delicious desserts!",
+                recipes = desserts,
+                onClick = { recipe ->
+                    recipeViewModel.setCurrentRecipe(recipe)
+                    navController.navigate(Screen.Recipe.route)
+                })
+            }
+            item { RecipesSection(
+                paddingValues = padding,
+                title = "Vegan Recipes",
+                subtitle = "Love cows or something!",
+                recipes = vegan,
+                onClick = { recipe ->
+                    recipeViewModel.setCurrentRecipe(recipe)
+                    navController.navigate(Screen.Recipe.route)
+                })
+            }
         }
         FiltersBottomSheet(state = bottomSheetState, dismiss = { filtersOpen.value = false}, openState = filtersOpen.value )
     }
@@ -154,8 +178,8 @@ fun CategoriesSection(modifier: Modifier = Modifier, paddingValues: PaddingValue
 }
 
 @Composable
-fun RecipesSection(modifier: Modifier = Modifier, paddingValues: PaddingValues, recipes: SpoonacularResult, onClick: (Results) -> Unit) {
-    MainScreenTitleText(modifier = modifier.padding(paddingValues), text = "Quick Meals", subtitle = "Make these meals in 15 minutes or less!")
+fun RecipesSection(modifier: Modifier = Modifier, title: String, subtitle: String, paddingValues: PaddingValues, recipes: SpoonacularResult, onClick: (Results) -> Unit) {
+    MainScreenTitleText(modifier = modifier.padding(paddingValues), text = title, subtitle = subtitle)
     LazyRow(
         contentPadding = PaddingValues(horizontal = 20.dp),
         horizontalArrangement = Arrangement.spacedBy(10.dp)

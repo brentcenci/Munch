@@ -21,13 +21,25 @@ class MainScreenViewModel: ViewModel() {
     private val _quick15: MutableStateFlow<SpoonacularResult> = MutableStateFlow(SpoonacularResult())
     val quick15 = _quick15.stateIn(viewModelScope, SharingStarted.Lazily, SpoonacularResult())
 
+    private val _desserts: MutableStateFlow<SpoonacularResult> = MutableStateFlow(SpoonacularResult())
+    val desserts = _desserts.stateIn(viewModelScope, SharingStarted.Lazily, SpoonacularResult())
+
+    private val _vegan: MutableStateFlow<SpoonacularResult> = MutableStateFlow(SpoonacularResult())
+    val vegan = _vegan.stateIn(viewModelScope, SharingStarted.Lazily, SpoonacularResult())
+
     init {
         viewModelScope.launch {
             println("Doing Init for Main Screen")
             try {
-                val results = RecipeApiClient.recipeApiService.getQuickMeals15()
-                println("Main Screen, View Model, Quick 15: $results")
-                _quick15.value = results
+                val quick = RecipeApiClient.recipeApiService.getQuickMeals15()
+                println("Main Screen, View Model, Quick 15: $quick")
+                _quick15.value = quick
+                val desserts = RecipeApiClient.recipeApiService.getDessertMeals()
+                println("Main Screen, View Model, Quick 15: $desserts")
+                _desserts.value = desserts
+                val vegan = RecipeApiClient.recipeApiService.getVeganMeals()
+                println("Main Screen, View Model, Quick 15: $vegan")
+                _vegan.value = vegan
             } catch (e: Exception) {
                 println(e.message)
             }
