@@ -36,6 +36,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -63,6 +64,8 @@ import com.brentcodes.munch.ui.theme.LightGrey
 import com.brentcodes.munch.ui.theme.MainGreen
 import com.brentcodes.recipesapplication.model.spoonaculardata.Results
 import com.brentcodes.recipesapplication.model.spoonaculardata.SpoonacularResult
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -88,7 +91,9 @@ fun CleanMainScreen(modifier: Modifier = Modifier, navController: NavController,
                     navController.navigate(Screen.Recipe.route)
                 })
             }
-            item { RandomRecipeSection(paddingValues = padding, onClick = { viewModel.randomRecipe() }) }
+            item { RandomRecipeSection(paddingValues = padding, onClick = {
+                viewModel.randomRecipe(recipeViewModel = recipeViewModel, navController= navController)
+            }) }
         }
         FiltersBottomSheet(state = bottomSheetState, dismiss = { filtersOpen.value = false}, openState = filtersOpen.value )
     }
@@ -183,10 +188,17 @@ fun RandomRecipeSection(modifier: Modifier = Modifier, paddingValues: PaddingVal
             Column {
                 Text(text = "Can't decide?", color = Color.White, fontSize = 30.sp)
                 Text(text = "Let us make your life easier.", color = Color.White, fontSize = 16.sp)
-                Button(onClick = { onClick() }, modifier = Modifier
-                    .padding(10.dp)
-                    .fillMaxWidth()
-                    .height(70.dp), shape = RoundedCornerShape(10.dp), colors = ButtonDefaults.buttonColors(containerColor = MainGreen, contentColor = Color.White)) {
+                Button(onClick =
+                    {
+                        onClick()
+                    },
+                    modifier = Modifier
+                        .padding(10.dp)
+                        .fillMaxWidth()
+                        .height(70.dp),
+                    shape = RoundedCornerShape(10.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = MainGreen, contentColor = Color.White)
+                ) {
                     Text("Random Recipe")
                     Icon(Icons.Rounded.PlayArrow, "Arrow Icon")
                 }
