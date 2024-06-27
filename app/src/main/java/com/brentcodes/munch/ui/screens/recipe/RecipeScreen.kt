@@ -1,5 +1,6 @@
 package com.brentcodes.munch.ui.screens.recipe
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -16,6 +17,7 @@ import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Icon
+import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -107,6 +109,15 @@ fun RecipeScreen(modifier: Modifier = Modifier, viewModel: RecipeScreenViewModel
         item {
             Spacer(Modifier.height(20.dp))
         }
+
+        item {
+            TabRow(selectedTabIndex = 0) { }
+        }
+
+        item {
+            Spacer(Modifier.height(20.dp))
+        }
+
         item {
             DropdownSection(
                 "Ingredients",
@@ -161,6 +172,7 @@ fun DropdownSection(title: String, contentColor: Color = Color.Black, color: Col
     Column(
         modifier = Modifier
             .fillMaxWidth()
+            .animateContentSize()
             .clip(shape = if (last) RoundedCornerShape(bottomStart = 20.dp, bottomEnd = 20.dp) else RectangleShape)
             .background(colorAbove)
             .background(color, RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
