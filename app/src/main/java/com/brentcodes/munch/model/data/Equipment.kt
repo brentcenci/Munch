@@ -3,7 +3,7 @@ package com.brentcodes.munch.model.data
 
 import com.google.gson.annotations.SerializedName
 
-data class Ingredient(
+data class Equipment(
     @SerializedName("id")
     val id: Int,
     @SerializedName("image")
@@ -11,5 +11,7 @@ data class Ingredient(
     @SerializedName("localizedName")
     val localizedName: String,
     @SerializedName("name")
-    val name: String
+    val name: String,
+    @SerializedName("temperature")
+    val temperature: Temperature?
 )

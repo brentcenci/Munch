@@ -33,6 +33,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.brentcodes.munch.model.data.AnalyzedInstruction
+import com.brentcodes.munch.model.data.Ingredient
+import com.brentcodes.munch.model.data.IngredientX
 import com.brentcodes.munch.ui.RecipeViewModel
 import com.brentcodes.munch.ui.theme.DarkGrey
 import com.brentcodes.munch.ui.theme.DarkerGreen
@@ -48,7 +51,7 @@ fun RecipeScreen(modifier: Modifier = Modifier, viewModel: RecipeScreenViewModel
     val instructionsExpanded by viewModel.expandedInstructions.collectAsState()
     val nutritionExpanded by viewModel.expandedNutrition.collectAsState()
     if (recipe.vegan != null) {
-        println(recipe.nutrition!!.ingredients)
+        println(recipe)
     }
 
     val padding = PaddingValues(horizontal = 20.dp)
@@ -128,7 +131,7 @@ fun RecipeScreen(modifier: Modifier = Modifier, viewModel: RecipeScreenViewModel
                 expanded = ingredientsExpanded,
                 onClick = { viewModel.toggleIngredients() }
             ) {
-                Text("Hey this is expanded")
+                recipe.nutrition?.ingredients?.let { IngredientsSection(ingredients = it) }
             }
         }
         item {
@@ -139,7 +142,7 @@ fun RecipeScreen(modifier: Modifier = Modifier, viewModel: RecipeScreenViewModel
                 expanded = instructionsExpanded,
                 onClick = { viewModel.toggleInstructions() }
             ) {
-                Text("Hey this is expanded")
+                recipe.analyzedInstructions?.let { InstructionsSection(instructions = it) }
             }
         }
         item {
@@ -212,5 +215,33 @@ fun DropdownSection(title: String, contentColor: Color = Color.Black, color: Col
             }
         }
 
+    }
+}
+
+@Composable
+fun IngredientsSection(modifier: Modifier = Modifier, ingredients : List<IngredientX>) {
+    Column {
+        ingredients.forEach { ingredient ->
+            Row {
+                Text("${ingredient.amount} ${ingredient.unit}")
+                Spacer(modifier = Modifier.weight(1f))
+                Text(ingredient.name)
+            }
+        }
+    }
+}
+
+
+@Composable
+fun InstructionsSection(modifier: Modifier = Modifier, instructions : List<AnalyzedInstruction>) {
+    Column {
+        instructions.forEach { instruction ->
+            instruction.steps.forEach { step ->
+                Row{
+                    Text(step.number.toString() + " ")
+                    Text(step.step)
+                }
+            }
+        }
     }
 }

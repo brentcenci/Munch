@@ -9,7 +9,7 @@ data class Nutrition(
     @SerializedName("flavonoids")
     val flavonoids: List<Flavonoid>,
     @SerializedName("ingredients")
-    val ingredients: List<Ingredient>,
+    val ingredients: List<IngredientX>,
     @SerializedName("nutrients")
     val nutrients: List<NutrientX>,
     @SerializedName("properties")

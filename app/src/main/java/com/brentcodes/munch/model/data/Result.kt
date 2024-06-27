@@ -6,8 +6,8 @@ import com.google.gson.annotations.SerializedName
 data class Result(
     @SerializedName("aggregateLikes")
     val aggregateLikes: Int? = null,
-    @SerializedName("author")
-    val author: String? = null,
+    @SerializedName("analyzedInstructions")
+    val analyzedInstructions: List<AnalyzedInstruction>? = null,
     @SerializedName("cheap")
     val cheap: Boolean? = null,
     @SerializedName("cookingMinutes")
