@@ -3,9 +3,8 @@ package com.brentcodes.munch.ui.screens.search
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.brentcodes.munch.model.RecipeApiClient
-import com.brentcodes.munch.model.RecipeApiService
-import com.brentcodes.munch.model.spoonacular.AutocompleteResponse
-import com.brentcodes.recipesapplication.model.spoonaculardata.SpoonacularResult
+import com.brentcodes.munch.model.data.AutocompleteResponse
+import com.brentcodes.munch.model.data.SearchResult
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
@@ -27,10 +26,12 @@ class SearchScreenViewModel : ViewModel() {
     private val _selectedIntolerances: MutableStateFlow<List<String>> = MutableStateFlow(emptyList())
     val selectedIntolerances = _selectedIntolerances.stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
 
-    private val _results: MutableStateFlow<SpoonacularResult> = MutableStateFlow(SpoonacularResult())
-    val results = _results.stateIn(viewModelScope, SharingStarted.Lazily, SpoonacularResult())
+    private val _results: MutableStateFlow<SearchResult> = MutableStateFlow(SearchResult())
+    val results = _results.stateIn(viewModelScope, SharingStarted.Lazily, SearchResult())
 
-    private val _suggestions: MutableStateFlow<AutocompleteResponse> = MutableStateFlow(AutocompleteResponse())
+    private val _suggestions: MutableStateFlow<AutocompleteResponse> = MutableStateFlow(
+        AutocompleteResponse()
+    )
     val suggestions = _suggestions.stateIn(viewModelScope, SharingStarted.Lazily, AutocompleteResponse())
 
     init {
@@ -51,11 +52,11 @@ class SearchScreenViewModel : ViewModel() {
 
     fun search() {
         viewModelScope.launch {
-            val response: SpoonacularResult = try {
+            val response: SearchResult = try {
                 RecipeApiClient.recipeApiService.getComplexSearch(query = searchQuery.value)
             } catch (e: Exception) {
                 println(e.message)
-                SpoonacularResult()
+                SearchResult()
             }
             _results.value = response
         }

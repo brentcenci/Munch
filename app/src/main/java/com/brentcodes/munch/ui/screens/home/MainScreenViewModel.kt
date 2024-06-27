@@ -1,31 +1,27 @@
 package com.brentcodes.munch.ui.screens.home
 
-import androidx.compose.runtime.remember
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.brentcodes.munch.model.RecipeApiClient
-import com.brentcodes.munch.model.RecipeApiService
+import com.brentcodes.munch.model.data.SearchResult
 import com.brentcodes.munch.ui.RecipeViewModel
 import com.brentcodes.munch.ui.Screen
-import com.brentcodes.recipesapplication.model.spoonaculardata.Results
-import com.brentcodes.recipesapplication.model.spoonaculardata.SpoonacularResult
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import okhttp3.internal.wait
 
 class MainScreenViewModel: ViewModel() {
 
-    private val _quick15: MutableStateFlow<SpoonacularResult> = MutableStateFlow(SpoonacularResult())
-    val quick15 = _quick15.stateIn(viewModelScope, SharingStarted.Lazily, SpoonacularResult())
+    private val _quick15: MutableStateFlow<SearchResult> = MutableStateFlow(SearchResult())
+    val quick15 = _quick15.stateIn(viewModelScope, SharingStarted.Lazily, SearchResult())
 
-    private val _desserts: MutableStateFlow<SpoonacularResult> = MutableStateFlow(SpoonacularResult())
-    val desserts = _desserts.stateIn(viewModelScope, SharingStarted.Lazily, SpoonacularResult())
+    private val _desserts: MutableStateFlow<SearchResult> = MutableStateFlow(SearchResult())
+    val desserts = _desserts.stateIn(viewModelScope, SharingStarted.Lazily, SearchResult())
 
-    private val _vegan: MutableStateFlow<SpoonacularResult> = MutableStateFlow(SpoonacularResult())
-    val vegan = _vegan.stateIn(viewModelScope, SharingStarted.Lazily, SpoonacularResult())
+    private val _vegan: MutableStateFlow<SearchResult> = MutableStateFlow(SearchResult())
+    val vegan = _vegan.stateIn(viewModelScope, SharingStarted.Lazily, SearchResult())
 
     init {
         viewModelScope.launch {

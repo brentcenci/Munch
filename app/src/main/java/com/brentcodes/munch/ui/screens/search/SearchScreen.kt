@@ -34,13 +34,13 @@ fun SearchScreen(modifier: Modifier = Modifier, viewModel: SearchScreenViewModel
             item {
                 CustomSearchBar(paddingValues = padding, hasFilters = true, value = query, onValueChanged = {value -> viewModel.setSearchQuery(value) }, onSearch = { viewModel.search() })
             }
-            if (results.number == null && suggestions.isNotEmpty()) {
+            if (results.number == 0 && suggestions.isNotEmpty()) {
                 items(suggestions) {
                     SearchBarSuggestions(suggestion = it.title)
                 }
             }
 
-            if (results.number != null) {
+            if (results.number != 0) {
                 items(results.results) { result ->
                     RecipeCardTest(result = result, onClick = {recipe ->
                         recipeViewModel.setCurrentRecipe(recipe)

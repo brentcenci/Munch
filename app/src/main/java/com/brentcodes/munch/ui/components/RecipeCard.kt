@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import com.brentcodes.recipesapplication.model.spoonaculardata.Results
+import com.brentcodes.munch.model.data.Result
 
 @Composable
 fun RecipeCard(modifier: Modifier = Modifier) {
@@ -58,7 +58,7 @@ fun RecipeCard(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun RecipeCardTest(modifier: Modifier = Modifier, result: Results, onClick: (Results) -> Unit) {
+fun RecipeCardTest(modifier: Modifier = Modifier, result: Result, onClick: (Result) -> Unit) {
     Column(
         modifier = modifier.shadow(8.dp, RoundedCornerShape(10.dp)).clickable { onClick(result) }
     ) {

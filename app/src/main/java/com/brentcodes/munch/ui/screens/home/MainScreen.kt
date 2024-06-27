@@ -51,6 +51,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.brentcodes.munch.R
+import com.brentcodes.munch.model.data.Result
+import com.brentcodes.munch.model.data.SearchResult
 import com.brentcodes.munch.ui.CATEGORIES
 import com.brentcodes.munch.ui.CUISINES
 import com.brentcodes.munch.ui.DIETS
@@ -62,8 +64,6 @@ import com.brentcodes.munch.ui.RecipeViewModel
 import com.brentcodes.munch.ui.theme.DarkGrey
 import com.brentcodes.munch.ui.theme.LightGrey
 import com.brentcodes.munch.ui.theme.MainGreen
-import com.brentcodes.recipesapplication.model.spoonaculardata.Results
-import com.brentcodes.recipesapplication.model.spoonaculardata.SpoonacularResult
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
@@ -178,7 +178,7 @@ fun CategoriesSection(modifier: Modifier = Modifier, paddingValues: PaddingValue
 }
 
 @Composable
-fun RecipesSection(modifier: Modifier = Modifier, title: String, subtitle: String, paddingValues: PaddingValues, recipes: SpoonacularResult, onClick: (Results) -> Unit) {
+fun RecipesSection(modifier: Modifier = Modifier, title: String, subtitle: String, paddingValues: PaddingValues, recipes: SearchResult, onClick: (Result) -> Unit) {
     MainScreenTitleText(modifier = modifier.padding(paddingValues), text = title, subtitle = subtitle)
     LazyRow(
         contentPadding = PaddingValues(horizontal = 20.dp),

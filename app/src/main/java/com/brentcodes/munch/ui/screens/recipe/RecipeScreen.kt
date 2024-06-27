@@ -40,16 +40,16 @@ import com.brentcodes.munch.ui.theme.LightGrey
 import com.brentcodes.munch.ui.theme.LighterGreen
 import com.brentcodes.munch.ui.theme.LightestGreen
 import com.brentcodes.munch.ui.theme.MainGreen
-import com.brentcodes.recipesapplication.model.spoonaculardata.Results
 
 @Composable
 fun RecipeScreen(modifier: Modifier = Modifier, viewModel: RecipeScreenViewModel, recipeViewModel: RecipeViewModel) {
     val recipe by recipeViewModel.currentRecipe.collectAsState()
-    val ingredients by recipeViewModel.ingredients.collectAsState()
     val ingredientsExpanded by viewModel.expandedIngredients.collectAsState()
     val instructionsExpanded by viewModel.expandedInstructions.collectAsState()
     val nutritionExpanded by viewModel.expandedNutrition.collectAsState()
-    println("Ingredients: ${ingredients.ingredients}")
+    if (recipe.vegan != null) {
+        println(recipe.nutrition!!.ingredients)
+    }
 
     val padding = PaddingValues(horizontal = 20.dp)
 
@@ -213,9 +213,4 @@ fun DropdownSection(title: String, contentColor: Color = Color.Black, color: Col
         }
 
     }
-}
-
-@Composable
-fun IngredientsSection(modifier: Modifier = Modifier, recipe: Results) {
-    println(recipe)
 }
