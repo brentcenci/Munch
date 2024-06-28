@@ -36,7 +36,7 @@ fun SearchScreen(modifier: Modifier = Modifier, viewModel: SearchScreenViewModel
             }
             if (results.number == 0 && suggestions.isNotEmpty()) {
                 items(suggestions) {
-                    SearchBarSuggestions(suggestion = it.title)
+                    SearchBarSuggestions(suggestion = it.title, onClick = { viewModel.setSearchQuery(it) })
                 }
             }
 

@@ -3,6 +3,7 @@ package com.brentcodes.munch.ui.screens.recipe
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -10,13 +11,19 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonColors
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
@@ -36,6 +43,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.brentcodes.munch.model.data.AnalyzedInstruction
 import com.brentcodes.munch.model.data.Ingredient
@@ -51,7 +59,7 @@ import com.brentcodes.munch.ui.theme.LightestGreen
 import com.brentcodes.munch.ui.theme.MainGreen
 
 @Composable
-fun RecipeScreen(modifier: Modifier = Modifier, viewModel: RecipeScreenViewModel, recipeViewModel: RecipeViewModel) {
+fun RecipeScreen(modifier: Modifier = Modifier, navController: NavController, viewModel: RecipeScreenViewModel, recipeViewModel: RecipeViewModel) {
     val recipe by recipeViewModel.currentRecipe.collectAsState()
     val ingredientsExpanded by viewModel.expandedIngredients.collectAsState()
     val instructionsExpanded by viewModel.expandedInstructions.collectAsState()
@@ -66,14 +74,20 @@ fun RecipeScreen(modifier: Modifier = Modifier, viewModel: RecipeScreenViewModel
         modifier = modifier.fillMaxWidth()
     ) {
         item {
-            AsyncImage(
-                model = recipe.image,
-                contentDescription = "Cover Image",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(400.dp),
-                contentScale = ContentScale.Crop
-            )
+            Box {
+                AsyncImage(
+                    model = recipe.image,
+                    contentDescription = "Cover Image",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(400.dp),
+                    contentScale = ContentScale.Crop
+                )
+                IconButton(modifier = Modifier.padding(20.dp).align(Alignment.TopStart), onClick = { navController.popBackStack() }, colors = IconButtonDefaults.iconButtonColors(containerColor = DarkGrey.copy(alpha = 0.5f))) {
+                    Icon(Icons.Default.KeyboardArrowLeft, "Back Button", tint = Color.White, modifier = Modifier.size(40.dp))
+                }
+            }
+
         }
         item {
             Spacer(Modifier.height(20.dp))
