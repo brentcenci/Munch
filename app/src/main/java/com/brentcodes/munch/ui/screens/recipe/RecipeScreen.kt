@@ -40,7 +40,9 @@ import coil.compose.AsyncImage
 import com.brentcodes.munch.model.data.AnalyzedInstruction
 import com.brentcodes.munch.model.data.Ingredient
 import com.brentcodes.munch.model.data.IngredientX
+import com.brentcodes.munch.model.data.NutrientX
 import com.brentcodes.munch.ui.RecipeViewModel
+import com.brentcodes.munch.ui.components.SectionTabs
 import com.brentcodes.munch.ui.theme.DarkGrey
 import com.brentcodes.munch.ui.theme.DarkerGreen
 import com.brentcodes.munch.ui.theme.LightGrey
@@ -116,13 +118,13 @@ fun RecipeScreen(modifier: Modifier = Modifier, viewModel: RecipeScreenViewModel
                 }
             }
         }
-        /*item {
+        item {
             Spacer(Modifier.height(20.dp))
         }
 
-        item {
+        /*item {
             val selectedIndex = remember { mutableIntStateOf(0) }
-            TabRow(selectedTabIndex = selectedIndex.value) {
+            TabRow(selectedTabIndex = selectedIndex.value, contentColor = Color.White, containerColor = Color.Green) {
                 Tab(
                     selected = selectedIndex.value == 0,
                     onClick = { selectedIndex.value = 0 },
@@ -144,11 +146,11 @@ fun RecipeScreen(modifier: Modifier = Modifier, viewModel: RecipeScreenViewModel
                 1 -> recipe.analyzedInstructions?.let { InstructionsSection(instructions = it) }
                 2 -> recipe.nutrition?.ingredients?.let { IngredientsSection(ingredients = it) }
             }
-        }*/
+        }
 
         item {
             Spacer(Modifier.height(20.dp))
-        }
+        }*/
 
         item {
             DropdownSection(
@@ -180,7 +182,7 @@ fun RecipeScreen(modifier: Modifier = Modifier, viewModel: RecipeScreenViewModel
                 expanded = nutritionExpanded,
                 onClick = { viewModel.toggleNutrition() }
             ) {
-                Text("Hey this is expanded")
+                recipe.nutrition?.nutrients?.let { NutritionSection(nutritions = it) }
             }
         }
         item {
@@ -267,6 +269,19 @@ fun InstructionsSection(modifier: Modifier = Modifier, instructions : List<Analy
                     Text(step.number.toString() + " ")
                     Text(step.step)
                 }
+            }
+        }
+    }
+}
+
+@Composable
+fun NutritionSection(modifier: Modifier = Modifier, nutritions : List<NutrientX>) {
+    Column {
+        nutritions.forEach { nutrient ->
+            Row {
+                Text("${nutrient.amount} ${nutrient.unit}")
+                Spacer(modifier = Modifier.weight(1f))
+                Text(nutrient.name)
             }
         }
     }
