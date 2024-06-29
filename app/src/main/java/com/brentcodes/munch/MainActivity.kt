@@ -52,30 +52,32 @@ class MainActivity : ComponentActivity() {
                     selectedRoute = destination.route
                 }
                 val recipeViewModel: RecipeViewModel = viewModel()
+                val showBottomBarOnRecipes = true
                 Scaffold(
                     bottomBar = {
-                        NavigationBar(
-                            modifier = Modifier.height(100.dp),
-                            containerColor = Color.White
-                        ) {
-                            NavigationBarItem(alwaysShowLabel = false, label = {Text("Home")}, icon = {Icon(Icons.Default.Home, "Home Icon")}, onClick = {
-                                if (selectedRoute != Screen.Home.route) {
-                                    navController.navigate(Screen.Home.route) /*{ popUpTo(Screen.Home.route) { saveState = true } }*/
-                                }
+                        if (selectedRoute != Screen.Recipe.route || showBottomBarOnRecipes) {
+                            NavigationBar(
+                                modifier = Modifier.height(100.dp),
+                                containerColor = Color.White
+                            ) {
+                                NavigationBarItem(alwaysShowLabel = false, label = {Text("Home")}, icon = {Icon(Icons.Default.Home, "Home Icon")}, onClick = {
+                                    if (selectedRoute != Screen.Home.route) {
+                                        navController.navigate(Screen.Home.route) /*{ popUpTo(Screen.Home.route) { saveState = true } }*/
+                                    }
 
 
-                                                                                                                                                         }, selected = (selectedRoute == Screen.Home.route))
-                            NavigationBarItem(alwaysShowLabel = false, label = {Text("Search")}, icon = {Icon(Icons.Default.Search, "Search Icon")}, onClick = {
-                                if (selectedRoute != Screen.Search.route) {
-                                    navController.navigate(Screen.Search.route)
-                                }
-                                                                                                                                                               }, selected = (selectedRoute == Screen.Search.route))
-                            NavigationBarItem(alwaysShowLabel = false, label = {Text("Saved")}, icon = {Icon(Icons.Default.Favorite, "Saved Icon")}, onClick = {
-                                if (selectedRoute != Screen.Saved.route) {
-                                    navController.navigate(Screen.Saved.route)
-                                }
-                                                                                                                                                               }, selected = (selectedRoute == Screen.Saved.route))
-
+                                }, selected = (selectedRoute == Screen.Home.route))
+                                NavigationBarItem(alwaysShowLabel = false, label = {Text("Search")}, icon = {Icon(Icons.Default.Search, "Search Icon")}, onClick = {
+                                    if (selectedRoute != Screen.Search.route) {
+                                        navController.navigate(Screen.Search.route)
+                                    }
+                                }, selected = (selectedRoute == Screen.Search.route))
+                                NavigationBarItem(alwaysShowLabel = false, label = {Text("Saved")}, icon = {Icon(Icons.Default.Favorite, "Saved Icon")}, onClick = {
+                                    if (selectedRoute != Screen.Saved.route) {
+                                        navController.navigate(Screen.Saved.route)
+                                    }
+                                }, selected = (selectedRoute == Screen.Saved.route))
+                            }
                         }
                     }
                 ) { padding ->
