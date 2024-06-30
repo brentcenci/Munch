@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.brentcodes.munch.model.db.AppDatabase
 import com.brentcodes.munch.model.db.RecipeDao
+import com.brentcodes.munch.model.db.RecipeEntity
 import com.brentcodes.munch.model.db.RecipeRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -40,10 +41,18 @@ class RecipeScreenViewModel : ViewModel() {
         _savedState.value = !_savedState.value
     }
 
-    fun saveRecipe(id: String) {
+/*    fun saveRecipe(id: String) {
         viewModelScope.launch {
+            AppDatabase.database.recipeDao().insert(RecipeEntity(id))
         }
     }
+
+    fun getAllSavedRecipes() {
+        viewModelScope.launch {
+            val recipes = AppDatabase.database.recipeDao().getAllSavedRecipes()
+            println(recipes)
+        }
+    }*/
 
 
 

@@ -74,10 +74,10 @@ fun RecipeScreen(modifier: Modifier = Modifier, navController: NavController, vi
         modifier = modifier.fillMaxWidth()
     ) {
 /*        item {
-            Button(onClick = {}) { Text("save recipe") }
+            Button(onClick = { recipe.id?.toString()?.let { viewModel.saveRecipe(it) } }) { Text("save recipe") }
         }
         item {
-            Button(onClick = {}) { Text("show all recipe") }
+            Button(onClick = {viewModel.getAllSavedRecipes()}) { Text("show all recipe") }
         }*/
         item {
             Box {
