@@ -2,9 +2,13 @@ package com.brentcodes.munch.ui.screens.recipe
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.brentcodes.munch.model.db.AppDatabase
+import com.brentcodes.munch.model.db.RecipeDao
+import com.brentcodes.munch.model.db.RecipeRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
 class RecipeScreenViewModel : ViewModel() {
 
@@ -34,6 +38,11 @@ class RecipeScreenViewModel : ViewModel() {
 
     fun toggleSavedState() {
         _savedState.value = !_savedState.value
+    }
+
+    fun saveRecipe(id: String) {
+        viewModelScope.launch {
+        }
     }
 
 

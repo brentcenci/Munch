@@ -28,6 +28,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.room.Room
+import com.brentcodes.munch.model.db.AppDatabase
 import com.brentcodes.munch.ui.screens.home.CleanMainScreen
 import com.brentcodes.munch.ui.Screen
 import com.brentcodes.munch.ui.screens.home.MainScreenViewModel
@@ -40,9 +42,22 @@ import com.brentcodes.munch.ui.screens.search.SearchScreenViewModel
 import com.brentcodes.munch.ui.theme.MunchTheme
 
 class MainActivity : ComponentActivity() {
+/*
+    companion object {
+        lateinit var database: AppDatabase
+            private set
+    }*/
+
+
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+/*        database = Room.databaseBuilder(
+            applicationContext,
+            AppDatabase::class.java, "app-database"
+        ).build()*/
+
         enableEdgeToEdge()
         setContent {
             MunchTheme {

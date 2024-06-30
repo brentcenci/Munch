@@ -73,6 +73,12 @@ fun RecipeScreen(modifier: Modifier = Modifier, navController: NavController, vi
     LazyColumn(
         modifier = modifier.fillMaxWidth()
     ) {
+/*        item {
+            Button(onClick = {}) { Text("save recipe") }
+        }
+        item {
+            Button(onClick = {}) { Text("show all recipe") }
+        }*/
         item {
             Box {
                 AsyncImage(
