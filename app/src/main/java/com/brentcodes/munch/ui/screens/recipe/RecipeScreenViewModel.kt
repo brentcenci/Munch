@@ -2,6 +2,8 @@ package com.brentcodes.munch.ui.screens.recipe
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.brentcodes.munch.MyApp
+import com.brentcodes.munch.MyApp.Companion.database
 import com.brentcodes.munch.model.db.AppDatabase
 import com.brentcodes.munch.model.db.RecipeDao
 import com.brentcodes.munch.model.db.RecipeEntity
@@ -41,18 +43,25 @@ class RecipeScreenViewModel : ViewModel() {
         _savedState.value = !_savedState.value
     }
 
-/*    fun saveRecipe(id: String) {
+    fun saveRecipe(id: String) {
         viewModelScope.launch {
-            AppDatabase.database.recipeDao().insert(RecipeEntity(id))
+            val recipeEntity = RecipeEntity(id)
+            database.recipeDao().insert(recipeEntity)
         }
     }
 
     fun getAllSavedRecipes() {
         viewModelScope.launch {
-            val recipes = AppDatabase.database.recipeDao().getAllSavedRecipes()
+            val recipes = database.recipeDao().getAllSavedRecipes()
             println(recipes)
         }
-    }*/
+    }
+
+    fun deleteAllSavedRecipes() {
+        viewModelScope.launch {
+            database.recipeDao().deleteAll()
+        }
+    }
 
 
 

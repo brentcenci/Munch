@@ -42,21 +42,10 @@ import com.brentcodes.munch.ui.screens.search.SearchScreenViewModel
 import com.brentcodes.munch.ui.theme.MunchTheme
 
 class MainActivity : ComponentActivity() {
-/*
-    companion object {
-        lateinit var database: AppDatabase
-            private set
-    }*/
-
 
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-/*        database = Room.databaseBuilder(
-            applicationContext,
-            AppDatabase::class.java, "app-database"
-        ).build()*/
 
         enableEdgeToEdge()
         setContent {
