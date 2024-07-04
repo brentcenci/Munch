@@ -7,6 +7,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
@@ -22,6 +23,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -76,7 +78,8 @@ class MainActivity : ComponentActivity() {
                                         navController.navigate(Screen.Search.route)
                                     }
                                 }, selected = (selectedRoute == Screen.Search.route))
-                                NavigationBarItem(alwaysShowLabel = false, label = {Text("Saved")}, icon = {Icon(Icons.Default.Favorite, "Saved Icon")}, onClick = {
+                                NavigationBarItem(alwaysShowLabel = false, label = {Text("Saved")}, icon = {Icon(
+                                    painterResource(R.drawable.savenavbar), "Saved Icon", modifier = Modifier.size(24.dp))}, onClick = {
                                     if (selectedRoute != Screen.Saved.route) {
                                         navController.navigate(Screen.Saved.route)
                                     }

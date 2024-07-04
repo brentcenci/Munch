@@ -15,24 +15,17 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconButtonColors
 import androidx.compose.material3.IconButtonDefaults
-import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -40,27 +33,32 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.brentcodes.munch.R
 import com.brentcodes.munch.model.data.AnalyzedInstruction
-import com.brentcodes.munch.model.data.Ingredient
 import com.brentcodes.munch.model.data.IngredientX
 import com.brentcodes.munch.model.data.NutrientX
 import com.brentcodes.munch.ui.RecipeViewModel
-import com.brentcodes.munch.ui.components.SectionTabs
 import com.brentcodes.munch.ui.theme.DarkGrey
-import com.brentcodes.munch.ui.theme.DarkerGreen
 import com.brentcodes.munch.ui.theme.LightGrey
 import com.brentcodes.munch.ui.theme.LighterGreen
 import com.brentcodes.munch.ui.theme.LightestGreen
 import com.brentcodes.munch.ui.theme.MainGreen
 
 @Composable
-fun RecipeScreen(modifier: Modifier = Modifier, navController: NavController, viewModel: RecipeScreenViewModel, recipeViewModel: RecipeViewModel) {
+fun RecipeScreen(
+    modifier: Modifier = Modifier,
+    navController: NavController,
+    viewModel: RecipeScreenViewModel,
+    recipeViewModel: RecipeViewModel
+) {
     val recipe by recipeViewModel.currentRecipe.collectAsState()
+    val saved by viewModel.savedState.collectAsState()
     val ingredientsExpanded by viewModel.expandedIngredients.collectAsState()
     val instructionsExpanded by viewModel.expandedInstructions.collectAsState()
     val nutritionExpanded by viewModel.expandedNutrition.collectAsState()
@@ -74,13 +72,15 @@ fun RecipeScreen(modifier: Modifier = Modifier, navController: NavController, vi
         modifier = modifier.fillMaxWidth()
     ) {
         item {
-            Button(onClick = { recipe.id?.toString()?.let { viewModel.saveRecipe(it) } }) { Text("save recipe") }
+            Button(onClick = {
+                recipe.id?.toString()?.let { viewModel.saveRecipe(it) }
+            }) { Text("save recipe") }
         }
         item {
-            Button(onClick = {viewModel.getAllSavedRecipes()}) { Text("show all recipe") }
+            Button(onClick = { viewModel.getAllSavedRecipes() }) { Text("show all recipe") }
         }
         item {
-            Button(onClick = {viewModel.deleteAllSavedRecipes()}) { Text("delete all recipe") }
+            Button(onClick = { viewModel.deleteAllSavedRecipes() }) { Text("delete all recipe") }
         }
         item {
             Box {
@@ -92,8 +92,21 @@ fun RecipeScreen(modifier: Modifier = Modifier, navController: NavController, vi
                         .height(400.dp),
                     contentScale = ContentScale.Crop
                 )
-                IconButton(modifier = Modifier.padding(20.dp).align(Alignment.TopStart), onClick = { navController.popBackStack() }, colors = IconButtonDefaults.iconButtonColors(containerColor = DarkGrey.copy(alpha = 0.5f))) {
-                    Icon(Icons.Default.KeyboardArrowLeft, "Back Button", tint = Color.White, modifier = Modifier.size(40.dp))
+                IconButton(
+                    modifier = Modifier
+                        .padding(20.dp)
+                        .align(Alignment.TopStart),
+                    onClick = { navController.popBackStack() },
+                    colors = IconButtonDefaults.iconButtonColors(
+                        containerColor = DarkGrey.copy(alpha = 0.5f)
+                    )
+                ) {
+                    Icon(
+                        Icons.Default.KeyboardArrowLeft,
+                        "Back Button",
+                        tint = Color.White,
+                        modifier = Modifier.size(40.dp)
+                    )
                 }
             }
 
@@ -109,7 +122,17 @@ fun RecipeScreen(modifier: Modifier = Modifier, navController: NavController, vi
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.weight(1f)
                 )
-                Icon(Icons.Default.FavoriteBorder, "Save Icon")
+                IconButton(onClick = { viewModel.toggleSavedState() }) {
+                    if (saved) Icon(
+                        painterResource(R.drawable.saved),
+                        "Saved Icon",
+                        modifier = Modifier.size(24.dp)
+                    ) else Icon(
+                        painterResource(R.drawable.save),
+                        "Save Icon",
+                        modifier = Modifier.size(24.dp)
+                    )
+                }
             }
         }
         item {
@@ -125,17 +148,25 @@ fun RecipeScreen(modifier: Modifier = Modifier, navController: NavController, vi
             Spacer(Modifier.height(20.dp))
         }
         item {
-            Row(modifier = Modifier
-                .padding(padding)
-                .shadow(10.dp)
-                .background(Color.White, shape = RoundedCornerShape(10.dp))
-                .fillMaxWidth()) {
-                Column(modifier = Modifier.weight(1f), horizontalAlignment = Alignment.CenterHorizontally) {
+            Row(
+                modifier = Modifier
+                    .padding(padding)
+                    .shadow(10.dp)
+                    .background(Color.White, shape = RoundedCornerShape(10.dp))
+                    .fillMaxWidth()
+            ) {
+                Column(
+                    modifier = Modifier.weight(1f),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
                     Text("Servings")
                     Text("${recipe.servings}", fontSize = 18.sp)
                 }
                 Text("|", fontSize = 40.sp, color = LightGrey)
-                Column(modifier = Modifier.weight(1f), horizontalAlignment = Alignment.CenterHorizontally) {
+                Column(
+                    modifier = Modifier.weight(1f),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
                     Text("Takes")
                     Text("${recipe.readyInMinutes} mins", fontSize = 18.sp)
                 }
@@ -216,7 +247,7 @@ fun RecipeScreen(modifier: Modifier = Modifier, navController: NavController, vi
                 colorAbove = MainGreen,
                 last = false,
                 expanded = true,
-                onClick = {  }
+                onClick = { }
             ) {
                 Text("Hey this is expanded")
             }
@@ -225,7 +256,16 @@ fun RecipeScreen(modifier: Modifier = Modifier, navController: NavController, vi
 }
 
 @Composable
-fun DropdownSection(title: String, contentColor: Color = Color.Black, color: Color = LightestGreen, colorAbove: Color = Color.Transparent, last: Boolean = false, expanded: Boolean, onClick: () -> Unit = { }, content: @Composable () -> Unit) {
+fun DropdownSection(
+    title: String,
+    contentColor: Color = Color.Black,
+    color: Color = LightestGreen,
+    colorAbove: Color = Color.Transparent,
+    last: Boolean = false,
+    expanded: Boolean,
+    onClick: () -> Unit = { },
+    content: @Composable () -> Unit
+) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -270,7 +310,7 @@ fun DropdownSection(title: String, contentColor: Color = Color.Black, color: Col
 }
 
 @Composable
-fun IngredientsSection(modifier: Modifier = Modifier, ingredients : List<IngredientX>) {
+fun IngredientsSection(modifier: Modifier = Modifier, ingredients: List<IngredientX>) {
     Column {
         ingredients.forEach { ingredient ->
             Row {
@@ -284,11 +324,11 @@ fun IngredientsSection(modifier: Modifier = Modifier, ingredients : List<Ingredi
 
 
 @Composable
-fun InstructionsSection(modifier: Modifier = Modifier, instructions : List<AnalyzedInstruction>) {
+fun InstructionsSection(modifier: Modifier = Modifier, instructions: List<AnalyzedInstruction>) {
     Column {
         instructions.forEach { instruction ->
             instruction.steps.forEach { step ->
-                Row{
+                Row {
                     Text(step.number.toString() + " ")
                     Text(step.step)
                 }
@@ -298,7 +338,7 @@ fun InstructionsSection(modifier: Modifier = Modifier, instructions : List<Analy
 }
 
 @Composable
-fun NutritionSection(modifier: Modifier = Modifier, nutritions : List<NutrientX>) {
+fun NutritionSection(modifier: Modifier = Modifier, nutritions: List<NutrientX>) {
     Column {
         nutritions.forEach { nutrient ->
             Row {
