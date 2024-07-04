@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 class SavedScreenViewModel : ViewModel() {
 
     private val _recipes: MutableStateFlow<SavedResponse> = MutableStateFlow(SavedResponse())
-    val recipes = _recipes.stateIn(viewModelScope, SharingStarted.Lazily, SavedResponse())
+    val recipes = _recipes.stateIn(viewModelScope, SharingStarted.Eagerly, SavedResponse())
 
     init {
         viewModelScope.launch {
