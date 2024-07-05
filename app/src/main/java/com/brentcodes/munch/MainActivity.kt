@@ -99,7 +99,7 @@ class MainActivity : ComponentActivity() {
                             SearchScreen(modifier = Modifier.padding(padding), viewModel = viewModel, recipeViewModel = recipeViewModel, navController = navController)
                         }
                         composable(route = Screen.Saved.route) {
-                            SavedScreen(modifier = Modifier.padding(padding))
+                            SavedScreen(modifier = Modifier.padding(padding), recipeViewModel = recipeViewModel, navController = navController)
                         }
                         composable(route = Screen.Recipe.route) {
                             val viewModel: RecipeScreenViewModel = ViewModelProvider(navController.getViewModelStoreOwner(navController.graph.id))[RecipeScreenViewModel::class.java]

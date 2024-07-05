@@ -13,23 +13,29 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import com.brentcodes.munch.ui.RecipeViewModel
 import com.brentcodes.munch.ui.Screen
 import com.brentcodes.munch.ui.components.RecipeCardTest
 
 @Composable
-fun SavedScreen(modifier: Modifier = Modifier) {
+fun SavedScreen(modifier: Modifier = Modifier, recipeViewModel: RecipeViewModel, navController: NavController) {
     val viewModel = remember { SavedScreenViewModel() }
     val recipes by viewModel.recipes.collectAsState()
+    val saved by recipeViewModel.saved.collectAsState(initial = emptyList())
     Column(modifier.fillMaxSize()) {
         LazyColumn(
             Modifier.fillMaxSize(),
             contentPadding = PaddingValues(20.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
+            item {
+                saved.forEach { Text(it.id) }
+            }
             items(recipes) { result ->
                 RecipeCardTest(result = result, onClick = {recipe ->
-                    /*recipeViewModel.setCurrentRecipe(recipe)
-                    navController.navigate(Screen.Recipe.route)*/
+                    recipeViewModel.setCurrentRecipe(recipe)
+                    navController.navigate(Screen.Recipe.route)
                 })
             }
         }
