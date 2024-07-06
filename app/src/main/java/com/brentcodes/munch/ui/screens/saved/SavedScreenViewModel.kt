@@ -15,6 +15,8 @@ import kotlinx.coroutines.launch
 
 class SavedScreenViewModel(saved : List<RecipeEntity>) : ViewModel() {
 
+    //Cant pass in the saved list like this, only passed once at empty.
+
     private val _recipes: MutableStateFlow<SavedResponse> = MutableStateFlow(SavedResponse())
     val recipes = _recipes.stateIn(viewModelScope, SharingStarted.Eagerly, SavedResponse())
 
@@ -31,3 +33,4 @@ class SavedScreenViewModel(saved : List<RecipeEntity>) : ViewModel() {
         }
     }
 }
+
