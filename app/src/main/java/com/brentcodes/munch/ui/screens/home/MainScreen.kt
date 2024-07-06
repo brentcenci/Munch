@@ -53,6 +53,7 @@ import androidx.navigation.NavController
 import com.brentcodes.munch.R
 import com.brentcodes.munch.model.data.Result
 import com.brentcodes.munch.model.data.SearchResult
+import com.brentcodes.munch.model.db.RecipeEntity
 import com.brentcodes.munch.ui.CATEGORIES
 import com.brentcodes.munch.ui.CUISINES
 import com.brentcodes.munch.ui.DIETS
@@ -69,7 +70,13 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CleanMainScreen(modifier: Modifier = Modifier, navController: NavController, viewModel: MainScreenViewModel, recipeViewModel: RecipeViewModel) {
+fun CleanMainScreen(
+    modifier: Modifier = Modifier,
+    navController: NavController,
+    viewModel: MainScreenViewModel,
+    recipeViewModel: RecipeViewModel
+) {
+    val saved by recipeViewModel.saved.collectAsState(emptyList())
     val padding = PaddingValues(horizontal = 20.dp)
     val filtersOpen = remember { mutableStateOf(false) }
     val bottomSheetState = rememberModalBottomSheetState()
@@ -83,45 +90,75 @@ fun CleanMainScreen(modifier: Modifier = Modifier, navController: NavController,
             verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
             item { LogoSection(paddingValues = padding) }
-            item { CustomSearchBar(paddingValues = padding, hasFilters = false, readOnly = true, onClick = { navController.navigate(Screen.Search.route) }) }
+            item {
+                CustomSearchBar(
+                    paddingValues = padding,
+                    hasFilters = false,
+                    readOnly = true,
+                    onClick = { navController.navigate(Screen.Search.route) })
+            }
             item { CategoriesSection(paddingValues = padding) }
-            item { RecipesSection(
-                paddingValues = padding,
-                title = "Quick Meals",
-                subtitle = "Make these meals in 15 minutes or less!",
-                recipes = quick15,
-                onClick = { recipe ->
-                    recipeViewModel.setCurrentRecipe(recipe)
-                    navController.navigate(Screen.Recipe.route)
+            item {
+                RecipesSection(
+                    paddingValues = padding,
+                    title = "Quick Meals",
+                    subtitle = "Make these meals in 15 minutes or less!",
+                    recipes = quick15,
+                    onClick = { recipe ->
+                        recipeViewModel.setCurrentRecipe(recipe)
+                        navController.navigate(Screen.Recipe.route)
+                    },
+                    savedList = saved,
+                    onSave = { recipeViewModel.saveRecipe(it) },
+                    onUnsave = { recipeViewModel.unsaveRecipe(it) }
+                )
+            }
+            item {
+                RandomRecipeSection(paddingValues = padding, onClick = {
+                    viewModel.randomRecipe(
+                        recipeViewModel = recipeViewModel,
+                        navController = navController
+                    )
                 })
             }
-            item { RandomRecipeSection(paddingValues = padding, onClick = {
-                viewModel.randomRecipe(recipeViewModel = recipeViewModel, navController= navController)
-            }) }
-            item { RecipesSection(
-                paddingValues = padding,
-                title = "Sweet Treats",
-                subtitle = "Try making these delicious desserts!",
-                recipes = desserts,
-                onClick = { recipe ->
-                    recipeViewModel.setCurrentRecipe(recipe)
-                    navController.navigate(Screen.Recipe.route)
-                })
+            item {
+                RecipesSection(
+                    paddingValues = padding,
+                    title = "Sweet Treats",
+                    subtitle = "Try making these delicious desserts!",
+                    recipes = desserts,
+                    onClick = { recipe ->
+                        recipeViewModel.setCurrentRecipe(recipe)
+                        navController.navigate(Screen.Recipe.route)
+                    },
+                    savedList = saved,
+                    onSave = { recipeViewModel.saveRecipe(it) },
+                    onUnsave = { recipeViewModel.unsaveRecipe(it) }
+                )
             }
-            item { RecipesSection(
-                paddingValues = padding,
-                title = "Vegan Recipes",
-                subtitle = "Love cows or something!",
-                recipes = vegan,
-                onClick = { recipe ->
-                    recipeViewModel.setCurrentRecipe(recipe)
-                    navController.navigate(Screen.Recipe.route)
-                })
+            item {
+                RecipesSection(
+                    paddingValues = padding,
+                    title = "Vegan Recipes",
+                    subtitle = "Love cows or something!",
+                    recipes = vegan,
+                    onClick = { recipe ->
+                        recipeViewModel.setCurrentRecipe(recipe)
+                        navController.navigate(Screen.Recipe.route)
+                    },
+                    savedList = saved,
+                    onSave = { recipeViewModel.saveRecipe(it) },
+                    onUnsave = { recipeViewModel.unsaveRecipe(it) }
+                )
             }
         }
-        FiltersBottomSheet(state = bottomSheetState, dismiss = { filtersOpen.value = false}, openState = filtersOpen.value )
+        FiltersBottomSheet(
+            state = bottomSheetState,
+            dismiss = { filtersOpen.value = false },
+            openState = filtersOpen.value
+        )
     }
-    
+
 
 }
 
@@ -130,7 +167,8 @@ fun LogoSection(modifier: Modifier = Modifier, paddingValues: PaddingValues) {
     Box(
         modifier
             .fillMaxWidth()
-            .padding(paddingValues = paddingValues)) {
+            .padding(paddingValues = paddingValues)
+    ) {
         Image(
             painter = painterResource(id = R.drawable.munch),
             "Logo",
@@ -166,10 +204,19 @@ fun CategoriesSection(modifier: Modifier = Modifier, paddingValues: PaddingValue
                 contentAlignment = Alignment.Center
             ) {
                 Column {
-                    Image(painterResource(id = it.second), contentDescription = "", modifier = Modifier
-                        .size(40.dp)
-                        .align(Alignment.CenterHorizontally))
-                    Text(text = it.first.replaceFirstChar { it.uppercase() }, fontSize = 10.sp, color = if (isSelected) Color.White else Color.Black, modifier = Modifier.align(alignment = Alignment.CenterHorizontally))
+                    Image(
+                        painterResource(id = it.second),
+                        contentDescription = "",
+                        modifier = Modifier
+                            .size(40.dp)
+                            .align(Alignment.CenterHorizontally)
+                    )
+                    Text(
+                        text = it.first.replaceFirstChar { it.uppercase() },
+                        fontSize = 10.sp,
+                        color = if (isSelected) Color.White else Color.Black,
+                        modifier = Modifier.align(alignment = Alignment.CenterHorizontally)
+                    )
                 }
 
             }
@@ -178,8 +225,22 @@ fun CategoriesSection(modifier: Modifier = Modifier, paddingValues: PaddingValue
 }
 
 @Composable
-fun RecipesSection(modifier: Modifier = Modifier, title: String, subtitle: String, paddingValues: PaddingValues, recipes: SearchResult, onClick: (Result) -> Unit) {
-    MainScreenTitleText(modifier = modifier.padding(paddingValues), text = title, subtitle = subtitle)
+fun RecipesSection(
+    modifier: Modifier = Modifier,
+    title: String,
+    subtitle: String,
+    paddingValues: PaddingValues,
+    recipes: SearchResult,
+    onClick: (Result) -> Unit,
+    savedList: List<RecipeEntity>,
+    onSave: (String) -> Unit,
+    onUnsave: (String) -> Unit
+) {
+    MainScreenTitleText(
+        modifier = modifier.padding(paddingValues),
+        text = title,
+        subtitle = subtitle
+    )
     LazyRow(
         contentPadding = PaddingValues(horizontal = 20.dp),
         horizontalArrangement = Arrangement.spacedBy(10.dp)
@@ -193,14 +254,25 @@ fun RecipesSection(modifier: Modifier = Modifier, title: String, subtitle: Strin
                     endY = Float.POSITIVE_INFINITY
                 )
             }*/
-            RecipeCardTest(modifier = Modifier.width(200.dp), result = result, onClick = onClick)
+            RecipeCardTest(
+                modifier = Modifier.width(200.dp),
+                result = result,
+                onClick = onClick,
+                isSaved = (savedList.map { it.id }.any { it == result.id.toString() }),
+                onSave = {onSave(result.id.toString())},
+                onUnsave = {onUnsave(result.id.toString())}
+            )
         }
     }
 }
 
 @Composable
-fun RandomRecipeSection(modifier: Modifier = Modifier, paddingValues: PaddingValues, onClick: () -> Unit = { }) {
-    Column{
+fun RandomRecipeSection(
+    modifier: Modifier = Modifier,
+    paddingValues: PaddingValues,
+    onClick: () -> Unit = { }
+) {
+    Column {
         Box(
             modifier = Modifier
                 .padding(paddingValues = paddingValues)
@@ -208,11 +280,12 @@ fun RandomRecipeSection(modifier: Modifier = Modifier, paddingValues: PaddingVal
                 .fillMaxWidth()
                 .height(140.dp)
                 .padding(10.dp)
-        ){
+        ) {
             Column {
                 Text(text = "Can't decide?", color = Color.White, fontSize = 30.sp)
                 Text(text = "Let us make your life easier.", color = Color.White, fontSize = 16.sp)
-                Button(onClick =
+                Button(
+                    onClick =
                     {
                         onClick()
                     },
@@ -221,7 +294,10 @@ fun RandomRecipeSection(modifier: Modifier = Modifier, paddingValues: PaddingVal
                         .fillMaxWidth()
                         .height(70.dp),
                     shape = RoundedCornerShape(10.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = MainGreen, contentColor = Color.White)
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MainGreen,
+                        contentColor = Color.White
+                    )
                 ) {
                     Text("Random Recipe")
                     Icon(Icons.Rounded.PlayArrow, "Arrow Icon")
@@ -232,7 +308,12 @@ fun RandomRecipeSection(modifier: Modifier = Modifier, paddingValues: PaddingVal
 }
 
 @Composable
-fun MainScreenTitleText(modifier: Modifier = Modifier, text: String, viewAll: Boolean = true, subtitle: String? = null) {
+fun MainScreenTitleText(
+    modifier: Modifier = Modifier,
+    text: String,
+    viewAll: Boolean = true,
+    subtitle: String? = null
+) {
     Column(modifier = modifier) {
         Row() {
             Text(
@@ -244,7 +325,7 @@ fun MainScreenTitleText(modifier: Modifier = Modifier, text: String, viewAll: Bo
             Spacer(modifier = Modifier.weight(1f))
             if (viewAll) Text("View all", textDecoration = TextDecoration.Underline)
         }
-        if (subtitle!= null) {
+        if (subtitle != null) {
             Text(
                 text = subtitle,
                 fontSize = 14.sp,
@@ -280,10 +361,19 @@ fun FilterFlowRow(modifier: Modifier = Modifier, filterGroup: Map<String, Int>) 
                 contentAlignment = Alignment.Center
             ) {
                 Column {
-                    Image(painterResource(id = it.second), contentDescription = "", modifier = Modifier
-                        .size(40.dp)
-                        .align(Alignment.CenterHorizontally))
-                    Text(text = it.first.replaceFirstChar { it.uppercase() }, fontSize = 10.sp, color = Color.Black, modifier = Modifier.align(alignment = Alignment.CenterHorizontally))
+                    Image(
+                        painterResource(id = it.second),
+                        contentDescription = "",
+                        modifier = Modifier
+                            .size(40.dp)
+                            .align(Alignment.CenterHorizontally)
+                    )
+                    Text(
+                        text = it.first.replaceFirstChar { it.uppercase() },
+                        fontSize = 10.sp,
+                        color = Color.Black,
+                        modifier = Modifier.align(alignment = Alignment.CenterHorizontally)
+                    )
                 }
             }
         }
@@ -292,7 +382,12 @@ fun FilterFlowRow(modifier: Modifier = Modifier, filterGroup: Map<String, Int>) 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FiltersBottomSheet(modifier: Modifier = Modifier, state: SheetState, dismiss: () -> Unit, openState: Boolean) {
+fun FiltersBottomSheet(
+    modifier: Modifier = Modifier,
+    state: SheetState,
+    dismiss: () -> Unit,
+    openState: Boolean
+) {
     if (openState) {
         ModalBottomSheet(
             onDismissRequest = { dismiss() },

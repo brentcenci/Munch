@@ -45,7 +45,11 @@ fun SearchScreen(modifier: Modifier = Modifier, viewModel: SearchScreenViewModel
                     RecipeCardTest(result = result, onClick = {recipe ->
                         recipeViewModel.setCurrentRecipe(recipe)
                         navController.navigate(Screen.Recipe.route)
-                    })
+                    },
+                        isSaved = false,
+                        onSave = { recipeViewModel.saveRecipe(it) },
+                        onUnsave = { recipeViewModel.unsaveRecipe(it) }
+                    )
                 }
             }
         }

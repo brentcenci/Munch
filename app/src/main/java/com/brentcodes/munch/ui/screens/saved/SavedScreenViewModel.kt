@@ -7,12 +7,13 @@ import com.brentcodes.munch.model.RecipeApiClient
 import com.brentcodes.munch.model.data.RandomResult
 import com.brentcodes.munch.model.data.SavedResponse
 import com.brentcodes.munch.model.data.SearchResult
+import com.brentcodes.munch.model.db.RecipeEntity
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-class SavedScreenViewModel : ViewModel() {
+class SavedScreenViewModel(saved : List<RecipeEntity>) : ViewModel() {
 
     private val _recipes: MutableStateFlow<SavedResponse> = MutableStateFlow(SavedResponse())
     val recipes = _recipes.stateIn(viewModelScope, SharingStarted.Eagerly, SavedResponse())
@@ -20,7 +21,7 @@ class SavedScreenViewModel : ViewModel() {
     init {
         viewModelScope.launch {
             var ids = ""
-            database.recipeDao().getAllSavedRecipes().forEach {
+            saved.forEach {
                 ids += it.id + ","
             }
             println("Ids to search: $ids")

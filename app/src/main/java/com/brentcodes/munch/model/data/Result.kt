@@ -1,8 +1,11 @@
 package com.brentcodes.munch.model.data
 
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
+@Entity (tableName = "result_table")
 data class Result(
     @SerializedName("aggregateLikes")
     val aggregateLikes: Int? = null,
@@ -29,7 +32,7 @@ data class Result(
     @SerializedName("healthScore")
     val healthScore: Int? = null,
     @SerializedName("id")
-    val id: Int? = null,
+    @PrimaryKey val id: Int? = null,
     @SerializedName("image")
     val image: String? = null,
     @SerializedName("imageType")

@@ -64,7 +64,7 @@ fun RecipeCard(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun RecipeCardTest(modifier: Modifier = Modifier, result: Result, onClick: (Result) -> Unit) {
+fun RecipeCardTest(modifier: Modifier = Modifier, result: Result, onClick: (Result) -> Unit, isSaved: Boolean, onSave: (String) -> Unit, onUnsave: (String) -> Unit ) {
     Column(
         modifier = modifier.shadow(8.dp, RoundedCornerShape(10.dp)).clickable { onClick(result) }
     ) {
@@ -89,7 +89,13 @@ fun RecipeCardTest(modifier: Modifier = Modifier, result: Result, onClick: (Resu
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.weight(1f)
                 )
-                IconButton(onClick = { }) { Icon(painterResource(R.drawable.save), "", modifier = Modifier.size(24.dp)) }
+                IconButton(onClick = {
+                    val id = result.id.toString()
+                    if (isSaved) onSave(id) else onUnsave(id)
+                }) {
+                    val painter = if (isSaved) painterResource(R.drawable.saved) else painterResource(R.drawable.save)
+                    Icon(painter, "", modifier = Modifier.size(24.dp))
+                }
             }
 
             Text(

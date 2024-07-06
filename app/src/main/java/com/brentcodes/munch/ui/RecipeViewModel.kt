@@ -2,6 +2,7 @@ package com.brentcodes.munch.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.brentcodes.munch.MyApp.Companion.database
 import com.brentcodes.munch.model.RecipeApiClient
 import com.brentcodes.munch.model.data.Result
@@ -18,6 +19,20 @@ class RecipeViewModel : ViewModel() {
     private val _savedRecipes: MutableStateFlow<List<RecipeEntity>> = MutableStateFlow(emptyList())
     val savedRecipes = _savedRecipes.stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
     val saved = database.recipeDao().getAllSavedRecipesFlow()
+
+    fun saveRecipe(recipeId: String) {
+        println("Saving recipe: $recipeId")
+        viewModelScope.launch {
+            database.recipeDao().insert(RecipeEntity(recipeId))
+        }
+    }
+
+    fun unsaveRecipe(recipeId: String) {
+        println("Removing saved recipe: $recipeId")
+        viewModelScope.launch {
+            database.recipeDao().delete(RecipeEntity(recipeId))
+        }
+    }
 
     private val _currentRecipe: MutableStateFlow<Result> = MutableStateFlow(Result())
     val currentRecipe = _currentRecipe.stateIn(viewModelScope, SharingStarted.Lazily, Result())

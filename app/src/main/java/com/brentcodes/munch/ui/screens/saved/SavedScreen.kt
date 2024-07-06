@@ -20,9 +20,9 @@ import com.brentcodes.munch.ui.components.RecipeCardTest
 
 @Composable
 fun SavedScreen(modifier: Modifier = Modifier, recipeViewModel: RecipeViewModel, navController: NavController) {
-    val viewModel = remember { SavedScreenViewModel() }
-    val recipes by viewModel.recipes.collectAsState()
     val saved by recipeViewModel.saved.collectAsState(initial = emptyList())
+    val viewModel = remember { SavedScreenViewModel(saved) }
+    val recipes by viewModel.recipes.collectAsState()
     Column(modifier.fillMaxSize()) {
         LazyColumn(
             Modifier.fillMaxSize(),
@@ -33,10 +33,16 @@ fun SavedScreen(modifier: Modifier = Modifier, recipeViewModel: RecipeViewModel,
                 saved.forEach { Text(it.id) }
             }
             items(recipes) { result ->
-                RecipeCardTest(result = result, onClick = {recipe ->
-                    recipeViewModel.setCurrentRecipe(recipe)
-                    navController.navigate(Screen.Recipe.route)
-                })
+                RecipeCardTest(result = result,
+                    onClick = {
+                        recipe ->
+
+                        recipeViewModel.setCurrentRecipe(recipe)
+                        navController.navigate(Screen.Recipe.route)
+                },
+                    isSaved = saved.map { it.id }.any { it == result.id.toString() },
+                    onSave = { recipeViewModel.saveRecipe(it) },
+                    onUnsave = { recipeViewModel.unsaveRecipe(it) })
             }
         }
     }
