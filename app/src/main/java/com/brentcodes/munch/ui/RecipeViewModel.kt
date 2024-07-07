@@ -18,7 +18,15 @@ class RecipeViewModel : ViewModel() {
 
     private val _savedRecipes: MutableStateFlow<List<RecipeEntity>> = MutableStateFlow(emptyList())
     val savedRecipes = _savedRecipes.stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
+    var initSaved = emptyList<RecipeEntity>()
     val saved = database.recipeDao().getAllSavedRecipesFlow()
+
+    init {
+        viewModelScope.launch {
+            val currentSaved = database.recipeDao().getAllSavedRecipes()
+            initSaved = currentSaved
+        }
+    }
 
     fun saveRecipe(recipeId: String) {
         println("Saving recipe: $recipeId")

@@ -66,6 +66,7 @@ import com.brentcodes.munch.ui.theme.DarkGrey
 import com.brentcodes.munch.ui.theme.LightGrey
 import com.brentcodes.munch.ui.theme.MainGreen
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -76,7 +77,7 @@ fun CleanMainScreen(
     viewModel: MainScreenViewModel,
     recipeViewModel: RecipeViewModel
 ) {
-    val saved by recipeViewModel.saved.collectAsState(emptyList())
+    val saved by recipeViewModel.saved.collectAsState(recipeViewModel.initSaved)
     val padding = PaddingValues(horizontal = 20.dp)
     val filtersOpen = remember { mutableStateOf(false) }
     val bottomSheetState = rememberModalBottomSheetState()
