@@ -6,9 +6,13 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -17,11 +21,20 @@ import com.brentcodes.munch.ui.components.CustomSearchBar
 import com.brentcodes.munch.ui.components.RecipeCardTest
 import com.brentcodes.munch.ui.components.SearchBarSuggestions
 import com.brentcodes.munch.ui.RecipeViewModel
+import com.brentcodes.munch.ui.screens.home.FiltersBottomSheet
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchScreen(modifier: Modifier = Modifier, viewModel: SearchScreenViewModel, recipeViewModel: RecipeViewModel, navController : NavController ) {
+fun SearchScreen(
+    modifier: Modifier = Modifier,
+    viewModel: SearchScreenViewModel,
+    recipeViewModel: RecipeViewModel,
+    navController: NavController
+) {
     val padding = PaddingValues(horizontal = 20.dp)
     //val vm = remember { SearchScreenViewModel() }
+    val filtersOpen = remember { mutableStateOf(false) }
+    val bottomSheetState = rememberModalBottomSheetState()
     val query by viewModel.searchQuery.collectAsState()
     val results by viewModel.results.collectAsState()
     val suggestions by viewModel.suggestions.collectAsState()
@@ -32,17 +45,27 @@ fun SearchScreen(modifier: Modifier = Modifier, viewModel: SearchScreenViewModel
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             item {
-                CustomSearchBar(paddingValues = padding, hasFilters = true, value = query, onValueChanged = {value -> viewModel.setSearchQuery(value) }, onSearch = { viewModel.search() })
+                CustomSearchBar(
+                    paddingValues = padding,
+                    hasFilters = true,
+                    value = query,
+                    onValueChanged = { value -> viewModel.setSearchQuery(value) },
+                    onSearch = { viewModel.search() },
+                    onFilterClick = { filtersOpen.value = true },
+                    filtersOpen = filtersOpen.value
+                )
             }
             if (results.number == 0 && suggestions.isNotEmpty()) {
                 items(suggestions) {
-                    SearchBarSuggestions(suggestion = it.title, onClick = { viewModel.setSearchQuery(it) })
+                    SearchBarSuggestions(
+                        suggestion = it.title,
+                        onClick = { viewModel.setSearchQuery(it) })
                 }
             }
 
             if (results.number != 0) {
                 items(results.results) { result ->
-                    RecipeCardTest(result = result, onClick = {recipe ->
+                    RecipeCardTest(result = result, onClick = { recipe ->
                         recipeViewModel.setCurrentRecipe(recipe)
                         navController.navigate(Screen.Recipe.route)
                     },
@@ -53,5 +76,10 @@ fun SearchScreen(modifier: Modifier = Modifier, viewModel: SearchScreenViewModel
                 }
             }
         }
+        FiltersBottomSheet(
+            state = bottomSheetState,
+            dismiss = { filtersOpen.value = false },
+            openState = filtersOpen.value
+        )
     }
 }
