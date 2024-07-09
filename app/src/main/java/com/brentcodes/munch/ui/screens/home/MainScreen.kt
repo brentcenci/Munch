@@ -38,6 +38,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -342,24 +343,27 @@ fun MainScreenTitleText(
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun FilterFlowRow(modifier: Modifier = Modifier, filterGroup: Map<String, Int>) {
-    val selected = remember { mutableStateOf<List<String>>(emptyList()) }
+fun FilterFlowRow(modifier: Modifier = Modifier, filterGroup: Map<String, Int>, toggleFilter: (String) -> Unit = { }) {
     FlowRow(
         maxItemsInEachRow = 4,
         horizontalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         filterGroup.toList().forEach {
+            val selected = remember { mutableStateOf(false) }
             Box(
                 modifier = Modifier
                     .padding(top = 5.dp, bottom = 5.dp)
                     .background(
-                        LightGrey,
+                        if (selected.value) MainGreen else LightGrey,
                         RoundedCornerShape(10.dp)
                     )
                     .width(80.dp)
                     .aspectRatio(1f)
                     .clip(RoundedCornerShape(10.dp))
-                    .clickable { }
+                    .clickable {
+                        selected.value = !selected.value
+                        toggleFilter(it.first)
+                    }
                     .padding(10.dp),
                 contentAlignment = Alignment.Center
             ) {
@@ -374,7 +378,7 @@ fun FilterFlowRow(modifier: Modifier = Modifier, filterGroup: Map<String, Int>) 
                     Text(
                         text = it.first.replaceFirstChar { it.uppercase() },
                         fontSize = 10.sp,
-                        color = Color.Black,
+                        color = if (selected.value) Color.White else Color.Black,
                         modifier = Modifier.align(alignment = Alignment.CenterHorizontally)
                     )
                 }
