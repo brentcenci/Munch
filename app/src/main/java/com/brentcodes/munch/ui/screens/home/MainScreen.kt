@@ -34,6 +34,7 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -342,6 +343,7 @@ fun MainScreenTitleText(
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun FilterFlowRow(modifier: Modifier = Modifier, filterGroup: Map<String, Int>) {
+    val selected = remember { mutableStateOf<List<String>>(emptyList()) }
     FlowRow(
         maxItemsInEachRow = 4,
         horizontalArrangement = Arrangement.spacedBy(10.dp)
@@ -393,6 +395,7 @@ fun FiltersBottomSheet(
         ModalBottomSheet(
             onDismissRequest = { dismiss() },
             sheetMaxWidth = Dp.Unspecified
+
         ) {
             LazyColumn(
                 modifier = Modifier.padding(20.dp),
