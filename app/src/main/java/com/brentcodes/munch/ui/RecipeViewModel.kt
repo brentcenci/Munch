@@ -2,15 +2,11 @@ package com.brentcodes.munch.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.brentcodes.munch.MyApp.Companion.database
-import com.brentcodes.munch.model.RecipeApiClient
 import com.brentcodes.munch.model.data.Result
 import com.brentcodes.munch.model.db.RecipeEntity
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 

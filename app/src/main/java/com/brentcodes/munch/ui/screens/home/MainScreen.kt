@@ -6,8 +6,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -27,18 +25,13 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -48,7 +41,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -57,19 +49,14 @@ import com.brentcodes.munch.model.data.Result
 import com.brentcodes.munch.model.data.SearchResult
 import com.brentcodes.munch.model.db.RecipeEntity
 import com.brentcodes.munch.ui.CATEGORIES
-import com.brentcodes.munch.ui.CUISINES
-import com.brentcodes.munch.ui.DIETS
-import com.brentcodes.munch.ui.INTOLERANCES
+import com.brentcodes.munch.ui.RecipeViewModel
 import com.brentcodes.munch.ui.Screen
 import com.brentcodes.munch.ui.components.CustomSearchBar
 import com.brentcodes.munch.ui.components.RecipeCardTest
-import com.brentcodes.munch.ui.RecipeViewModel
+import com.brentcodes.munch.ui.screens.search.FiltersBottomSheet
 import com.brentcodes.munch.ui.theme.DarkGrey
 import com.brentcodes.munch.ui.theme.LightGrey
 import com.brentcodes.munch.ui.theme.MainGreen
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -158,7 +145,8 @@ fun CleanMainScreen(
         FiltersBottomSheet(
             state = bottomSheetState,
             dismiss = { filtersOpen.value = false },
-            openState = filtersOpen.value
+            openState = filtersOpen.value,
+            currentlySelected = emptySet()
         )
     }
 
@@ -318,7 +306,7 @@ fun MainScreenTitleText(
     subtitle: String? = null
 ) {
     Column(modifier = modifier) {
-        Row() {
+        Row {
             Text(
                 text = text,
                 color = Color.Black,
@@ -339,89 +327,4 @@ fun MainScreenTitleText(
     }
 
 
-}
-
-@OptIn(ExperimentalLayoutApi::class)
-@Composable
-fun FilterFlowRow(modifier: Modifier = Modifier, filterGroup: Map<String, Int>, toggleFilter: (String) -> Unit = { }) {
-    FlowRow(
-        maxItemsInEachRow = 4,
-        horizontalArrangement = Arrangement.spacedBy(10.dp)
-    ) {
-        filterGroup.toList().forEach {
-            val selected = remember { mutableStateOf(false) }
-            Box(
-                modifier = Modifier
-                    .padding(top = 5.dp, bottom = 5.dp)
-                    .background(
-                        if (selected.value) MainGreen else LightGrey,
-                        RoundedCornerShape(10.dp)
-                    )
-                    .width(80.dp)
-                    .aspectRatio(1f)
-                    .clip(RoundedCornerShape(10.dp))
-                    .clickable {
-                        selected.value = !selected.value
-                        toggleFilter(it.first)
-                    }
-                    .padding(10.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Column {
-                    Image(
-                        painterResource(id = it.second),
-                        contentDescription = "",
-                        modifier = Modifier
-                            .size(40.dp)
-                            .align(Alignment.CenterHorizontally)
-                    )
-                    Text(
-                        text = it.first.replaceFirstChar { it.uppercase() },
-                        fontSize = 10.sp,
-                        color = if (selected.value) Color.White else Color.Black,
-                        modifier = Modifier.align(alignment = Alignment.CenterHorizontally)
-                    )
-                }
-            }
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun FiltersBottomSheet(
-    modifier: Modifier = Modifier,
-    state: SheetState,
-    dismiss: () -> Unit,
-    openState: Boolean
-) {
-    if (openState) {
-        ModalBottomSheet(
-            onDismissRequest = { dismiss() },
-            sheetMaxWidth = Dp.Unspecified
-
-        ) {
-            LazyColumn(
-                modifier = Modifier.padding(20.dp),
-            ) {
-                item { MainScreenTitleText(text = "Categories", viewAll = false) }
-                item {
-                    FilterFlowRow(filterGroup = CATEGORIES)
-                }
-                item { MainScreenTitleText(text = "Cuisines", viewAll = false) }
-                item {
-                    FilterFlowRow(filterGroup = CUISINES)
-                }
-                item { MainScreenTitleText(text = "Diet", viewAll = false) }
-                item {
-                    FilterFlowRow(filterGroup = DIETS)
-                }
-                item { MainScreenTitleText(text = "Intolerances", viewAll = false) }
-                item {
-                    FilterFlowRow(filterGroup = INTOLERANCES)
-                }
-            }
-
-        }
-    }
 }

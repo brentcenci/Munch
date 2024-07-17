@@ -11,7 +11,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Menu
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -35,7 +34,7 @@ fun CustomSearchBar(
     modifier: Modifier = Modifier,
     paddingValues: PaddingValues = PaddingValues(horizontal = 20.dp),
     hasFilters: Boolean = false,
-    filtersOpen: Boolean = false,
+    filtersActive: Boolean = false,
     onFilterClick: () -> Unit = {},
     readOnly: Boolean = false,
     value: String = "",
@@ -49,7 +48,7 @@ fun CustomSearchBar(
         onClick()
     }
 
-    val filterIconColors = if (!filtersOpen) {
+    val filterIconColors = if (!filtersActive) {
         IconButtonDefaults.iconButtonColors(containerColor = Color.Transparent, contentColor = Color.Black)
     } else {
         IconButtonDefaults.iconButtonColors(containerColor = MainGreen, contentColor = Color.White)

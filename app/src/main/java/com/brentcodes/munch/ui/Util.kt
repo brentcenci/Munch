@@ -2,6 +2,20 @@ package com.brentcodes.munch.ui
 
 import com.brentcodes.munch.R
 
+/*
+enum class Filters(title: String) {
+    MAINCOURSE("main course"),
+    SIDEDISH("side dish"),
+    DESSERT("dessert"),
+    APPETIZER("appetizer"),
+    SALAD("salad"),
+    BREAD("bread"),
+    BREAKFAST("breakfast"),
+    SOUP("soup"),
+}
+
+*/
+
 val CATEGORIES = mapOf(
     "main course" to R.drawable.diet,
     "side dish" to R.drawable.sidedish,
