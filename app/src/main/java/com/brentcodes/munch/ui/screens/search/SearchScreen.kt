@@ -88,7 +88,10 @@ fun SearchScreen(
                 items(suggestions) {
                     SearchBarSuggestions(
                         suggestion = it.title,
-                        onClick = { viewModel.setSearchQuery(it) })
+                        onClick = {
+                            viewModel.setSearchQuery(it)
+                            viewModel.search()
+                        })
                 }
             }
 
