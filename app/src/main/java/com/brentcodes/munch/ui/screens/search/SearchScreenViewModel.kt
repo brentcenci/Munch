@@ -81,9 +81,19 @@ class SearchScreenViewModel : ViewModel() {
     }
 
     fun search() {
+        val intolerances = _selectedIntolerances.value.joinToString(",")
+        val cuisines = _selectedCuisines.value.joinToString(",")
+        val categories = _selectedCategories.value.joinToString(",")
+        val diets = _selectedDiets.value.joinToString(",")
         viewModelScope.launch {
             val response: SearchResult = try {
-                RecipeApiClient.recipeApiService.getComplexSearch(query = searchQuery.value)
+                RecipeApiClient.recipeApiService.getComplexSearch(
+                    query = searchQuery.value,
+                    intolerances = intolerances,
+                    cuisine = cuisines,
+                    diet = diets,
+                    category = categories
+                )
             } catch (e: Exception) {
                 println(e.message)
                 SearchResult()
