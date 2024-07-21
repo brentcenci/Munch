@@ -91,7 +91,7 @@ fun RecipeCardTest(modifier: Modifier = Modifier, result: Result, onClick: (Resu
                 )
                 IconButton(onClick = {
                     val id = result.id.toString()
-                    if (isSaved) onSave(id) else onUnsave(id)
+                    if (!isSaved) onSave(id) else onUnsave(id)
                 }) {
                     val painter = if (isSaved) painterResource(R.drawable.saved) else painterResource(R.drawable.save)
                     Icon(painter, "", modifier = Modifier.size(24.dp))

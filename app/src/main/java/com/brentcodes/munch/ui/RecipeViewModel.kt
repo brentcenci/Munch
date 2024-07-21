@@ -3,6 +3,7 @@ package com.brentcodes.munch.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.brentcodes.munch.MyApp.Companion.database
+import com.brentcodes.munch.model.RecipeApiClient
 import com.brentcodes.munch.model.data.Result
 import com.brentcodes.munch.model.db.RecipeEntity
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,6 +17,7 @@ class RecipeViewModel : ViewModel() {
     val savedRecipes = _savedRecipes.stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
     var initSaved = emptyList<RecipeEntity>()
     val saved = database.recipeDao().getAllSavedRecipesFlow()
+
 
     init {
         viewModelScope.launch {
@@ -44,4 +46,14 @@ class RecipeViewModel : ViewModel() {
     fun setCurrentRecipe(recipe: Result) {
         _currentRecipe.value = recipe
     }
+
+    /*fun getSavedRecipes() {
+        viewModelScope.launch {
+            var ids = _savedRecipes.value.joinToString(",")
+            println("Ids to search: $ids")
+            val response = RecipeApiClient.recipeApiService.getSavedRecipes(ids = ids)
+            println("Saved Screen Response: $response")
+            _recipes.value = response
+        }
+    }*/
 }

@@ -250,8 +250,8 @@ fun RecipesSection(
                 result = result,
                 onClick = onClick,
                 isSaved = (savedList.map { it.id }.any { it == result.id.toString() }),
-                onSave = {onSave(result.id.toString())},
-                onUnsave = {onUnsave(result.id.toString())}
+                onSave = {onSave(it)},
+                onUnsave = {onUnsave(it)}
             )
         }
     }

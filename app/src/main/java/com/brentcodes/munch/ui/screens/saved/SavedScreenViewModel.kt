@@ -13,9 +13,15 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-class SavedScreenViewModel(saved : List<RecipeEntity>) : ViewModel() {
+class SavedScreenViewModel(initialSaved: List<RecipeEntity>) : ViewModel() {
 
     //Cant pass in the saved list like this, only passed once at empty.
+    private val _saved: MutableStateFlow<List<RecipeEntity>> = MutableStateFlow(initialSaved)
+    val saved = _saved.stateIn(viewModelScope, SharingStarted.Eagerly, initialSaved)
+
+    fun setSaved(savedList : List<RecipeEntity>) {
+        _saved.value = savedList
+    }
 
     private val _recipes: MutableStateFlow<SavedResponse> = MutableStateFlow(SavedResponse())
     val recipes = _recipes.stateIn(viewModelScope, SharingStarted.Eagerly, SavedResponse())
@@ -23,7 +29,7 @@ class SavedScreenViewModel(saved : List<RecipeEntity>) : ViewModel() {
     init {
         viewModelScope.launch {
             var ids = ""
-            saved.forEach {
+            _saved.value.forEach {
                 ids += it.id + ","
             }
             println("Ids to search: $ids")
