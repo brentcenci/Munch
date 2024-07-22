@@ -21,7 +21,7 @@ import com.brentcodes.munch.ui.components.RecipeCardTest
 @Composable
 fun SavedScreen(modifier: Modifier = Modifier, recipeViewModel: RecipeViewModel, navController: NavController) {
     val saved by recipeViewModel.saved.collectAsState(initial = recipeViewModel.initSaved)
-    val viewModel = remember { SavedScreenViewModel(initialSaved = saved) }
+    val viewModel = remember { SavedScreenViewModel() }
     viewModel.setSaved(saved)
     val recipes by viewModel.recipes.collectAsState()
     Column(modifier.fillMaxSize()) {

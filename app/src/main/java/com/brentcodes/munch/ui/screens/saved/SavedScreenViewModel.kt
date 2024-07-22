@@ -13,20 +13,14 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-class SavedScreenViewModel(initialSaved: List<RecipeEntity>) : ViewModel() {
+class SavedScreenViewModel() : ViewModel() {
 
     //Cant pass in the saved list like this, only passed once at empty.
-    private val _saved: MutableStateFlow<List<RecipeEntity>> = MutableStateFlow(initialSaved)
-    val saved = _saved.stateIn(viewModelScope, SharingStarted.Eagerly, initialSaved)
+    private val _saved: MutableStateFlow<List<RecipeEntity>> = MutableStateFlow(emptyList())
+    val saved = _saved.stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
 
     fun setSaved(savedList : List<RecipeEntity>) {
         _saved.value = savedList
-    }
-
-    private val _recipes: MutableStateFlow<SavedResponse> = MutableStateFlow(SavedResponse())
-    val recipes = _recipes.stateIn(viewModelScope, SharingStarted.Eagerly, SavedResponse())
-
-    init {
         viewModelScope.launch {
             var ids = ""
             _saved.value.forEach {
@@ -37,6 +31,22 @@ class SavedScreenViewModel(initialSaved: List<RecipeEntity>) : ViewModel() {
             println("Saved Screen Response: $response")
             _recipes.value = response
         }
+    }
+
+    private val _recipes: MutableStateFlow<SavedResponse> = MutableStateFlow(SavedResponse())
+    val recipes = _recipes.stateIn(viewModelScope, SharingStarted.Eagerly, SavedResponse())
+
+    init {
+        /*viewModelScope.launch {
+            var ids = ""
+            _saved.value.forEach {
+                ids += it.id + ","
+            }
+            println("Ids to search: $ids")
+            val response = RecipeApiClient.recipeApiService.getSavedRecipes(ids = ids)
+            println("Saved Screen Response: $response")
+            _recipes.value = response
+        }*/
     }
 }
 

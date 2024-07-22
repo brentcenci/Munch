@@ -1,5 +1,6 @@
 package com.brentcodes.munch.ui
 
+import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.brentcodes.munch.MyApp.Companion.database
