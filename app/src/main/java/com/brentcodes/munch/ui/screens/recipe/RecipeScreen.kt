@@ -58,7 +58,8 @@ fun RecipeScreen(
     recipeViewModel: RecipeViewModel
 ) {
     val recipe by recipeViewModel.currentRecipe.collectAsState()
-    val saved by viewModel.savedState.collectAsState()
+    val saved by recipeViewModel.saved.collectAsState(initial = recipeViewModel.initSaved)
+    val isSaved = saved.map { it.id }.any { it == recipe.id.toString() }
     val ingredientsExpanded by viewModel.expandedIngredients.collectAsState()
     val instructionsExpanded by viewModel.expandedInstructions.collectAsState()
     val nutritionExpanded by viewModel.expandedNutrition.collectAsState()
@@ -122,8 +123,8 @@ fun RecipeScreen(
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.weight(1f)
                 )
-                IconButton(onClick = { viewModel.toggleSavedState() }) {
-                    if (saved) Icon(
+                IconButton(onClick = { if (!isSaved) viewModel.saveRecipe(recipe.id.toString()) else viewModel.unsaveRecipe(recipe.id.toString()) }) {
+                    if (isSaved) Icon(
                         painterResource(R.drawable.saved),
                         "Saved Icon",
                         modifier = Modifier.size(24.dp)

@@ -50,6 +50,13 @@ class RecipeScreenViewModel : ViewModel() {
         }
     }
 
+    fun unsaveRecipe(id: String) {
+        viewModelScope.launch {
+            val recipeEntity = RecipeEntity(id)
+            database.recipeDao().delete(recipeEntity)
+        }
+    }
+
     fun getAllSavedRecipes() {
         viewModelScope.launch {
             val recipes = database.recipeDao().getAllSavedRecipes()
