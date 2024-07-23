@@ -78,9 +78,9 @@ fun RecipeCardTest(modifier: Modifier = Modifier, result: Result, onClick: (Resu
         }
 
         Column(
-            modifier = Modifier.fillMaxWidth().height(60.dp).background(Color.White).padding(5.dp)
+            modifier = Modifier.fillMaxWidth().height(70.dp).background(Color.White).padding(5.dp)
         ) {
-            Row {
+            Row(modifier = Modifier.height(30.dp)) {
                 Text(
                     result.title?: "Title",
                     fontWeight = FontWeight.Bold,
