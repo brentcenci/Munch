@@ -61,6 +61,7 @@ fun SearchScreen(
     val padding = PaddingValues(horizontal = 20.dp)
     //val vm = remember { SearchScreenViewModel() }
     val filtersOpen = remember { mutableStateOf(false) }
+    val savedList by recipeViewModel.saved.collectAsState(recipeViewModel.initSaved)
     val bottomSheetState = rememberModalBottomSheetState()
     val query by viewModel.searchQuery.collectAsState()
     val results by viewModel.results.collectAsState()
@@ -90,6 +91,7 @@ fun SearchScreen(
                         suggestion = it.title,
                         onClick = {
                             viewModel.setSearchQuery(it)
+
                             viewModel.search()
                         })
                 }
@@ -101,7 +103,7 @@ fun SearchScreen(
                         recipeViewModel.setCurrentRecipe(recipe)
                         navController.navigate(Screen.Recipe.route)
                     },
-                        isSaved = false,
+                        isSaved = (savedList.map { it.id }.any { it == result.id.toString() }),
                         onSave = { recipeViewModel.saveRecipe(it) },
                         onUnsave = { recipeViewModel.unsaveRecipe(it) }
                     )
