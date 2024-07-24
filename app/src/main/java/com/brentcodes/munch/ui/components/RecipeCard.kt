@@ -15,6 +15,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
@@ -65,6 +66,8 @@ fun RecipeCard(modifier: Modifier = Modifier) {
 
 @Composable
 fun RecipeCardTest(modifier: Modifier = Modifier, result: Result, onClick: (Result) -> Unit, isSaved: Boolean, onSave: (String) -> Unit, onUnsave: (String) -> Unit ) {
+    val time = remember { result.readyInMinutes ?: 0 }
+    val timeDisplay = if (time > 59) "${time/60} hrs ${time%60} mins" else "$time mins"
     Column(
         modifier = modifier.shadow(8.dp, RoundedCornerShape(10.dp)).clickable { onClick(result) }
     ) {
@@ -99,7 +102,7 @@ fun RecipeCardTest(modifier: Modifier = Modifier, result: Result, onClick: (Resu
             }
 
             Text(
-                "${result.readyInMinutes} mins, $${result.pricePerServing}",
+                "$timeDisplay, $${result.pricePerServing}",
                 fontSize = 12.sp,
                 modifier = Modifier.weight(1f)
             )
