@@ -68,6 +68,8 @@ fun RecipeCard(modifier: Modifier = Modifier) {
 fun RecipeCardTest(modifier: Modifier = Modifier, result: Result, onClick: (Result) -> Unit, isSaved: Boolean, onSave: (String) -> Unit, onUnsave: (String) -> Unit ) {
     val time = remember { result.readyInMinutes ?: 0 }
     val timeDisplay = if (time > 59) "${time/60} hrs ${time%60} mins" else "$time mins"
+    val timeHours = remember { if (time > 59) "${time/60}h" else "" }
+    val timeMins = remember { if (time%60 != 0) " ${time%60}m" else "" }
     Column(
         modifier = modifier.shadow(8.dp, RoundedCornerShape(10.dp)).clickable { onClick(result) }
     ) {
@@ -102,7 +104,7 @@ fun RecipeCardTest(modifier: Modifier = Modifier, result: Result, onClick: (Resu
             }
 
             Text(
-                "$timeDisplay, $${result.pricePerServing}",
+                "$timeHours$timeMins , ${result.pricePerServing}",
                 fontSize = 12.sp,
                 modifier = Modifier.weight(1f)
             )
